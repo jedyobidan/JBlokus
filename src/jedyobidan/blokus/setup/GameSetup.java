@@ -45,11 +45,11 @@ public abstract class GameSetup extends Stage{
 	}
 	
 	public void gameStart(){
-		GameStage stage = (GameStage)getDisplay().getStage("GAME");
+		GameStage stage = new GameStage(getDisplay());
 		for(Player p: players){
 			stage.addPlayer(p);
 		}
-		this.getDisplay().setStage("GAME");
+		this.getDisplay().addStage("GAME", stage);
 		stage.startGame();
 	}
 	

@@ -13,10 +13,7 @@ public class Gui extends JFrame{
 	public Gui(){
 		super("JBlokus");
 		display = new Display(WIDTH, HEIGHT, new ThreadFPSRunner(60));
-		GameStage game = new GameStage(display);
 		TitleScreen title = new TitleScreen(display);
-		
-		display.addStage("GAME", game);
 		display.addStage("TITLE", title);
 		this.add(display);
 		this.pack();

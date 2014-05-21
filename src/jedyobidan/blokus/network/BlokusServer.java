@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import jedyobidan.blokus.ai.AIPlayer;
-import jedyobidan.blokus.game.*;
+import jedyobidan.blokus.core.Player;
+import jedyobidan.blokus.local.*;
 import jedyobidan.blokus.setup.ServerSetup;
 import jedyobidan.net.Message;
 import jedyobidan.net.Server;
@@ -38,9 +39,6 @@ public class BlokusServer extends Server {
 	
 	public void clientJoined(ClientAgent agent){
 		super.clientJoined(agent);
-		for(PlayerData message: playerData){
-			agent.sendMessage(message);
-		}
 	}
 	
 	public void clientQuit(ClientAgent agent){
@@ -56,6 +54,10 @@ public class BlokusServer extends Server {
 			}
 		} else if (m instanceof DropRequest){
 			dropPlayer(m.origin);
+		} else if (m instanceof PlayerListRequest){
+			for(PlayerData message: playerData){
+				sendMessage(m.origin, message);
+			}
 		}
 	}
 	

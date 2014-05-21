@@ -2,9 +2,9 @@ package jedyobidan.blokus.setup;
 
 import java.awt.Color;
 
-import jedyobidan.blokus.Gui;
+import jedyobidan.blokus.ClientLaunch;
 import jedyobidan.blokus.ai.AIPlayer;
-import jedyobidan.blokus.game.LocalPlayer;
+import jedyobidan.blokus.local.LocalPlayer;
 import jedyobidan.ui.nanim.Command;
 import jedyobidan.ui.nanim.Controller;
 import jedyobidan.ui.nanim.Display;
@@ -30,7 +30,7 @@ public class LocalGameSetup extends GameSetup{
 		};
 		addActor(join);
 		
-		start = new Button(Gui.WIDTH-70, Gui.HEIGHT - 28, 60, 18, "Start", new Command(){
+		start = new Button(ClientLaunch.WIDTH-70, ClientLaunch.HEIGHT - 28, 60, 18, "Start", new Command(){
 			@Override
 			public void execute() {
 				gameStart();
@@ -38,7 +38,7 @@ public class LocalGameSetup extends GameSetup{
 		});
 		addActor(start);
 		
-		reset = new Button(Gui.WIDTH-140, Gui.HEIGHT - 28, 60, 18, new Color(192,0,0), Color.white, "Reset", new Command(){
+		reset = new Button(ClientLaunch.WIDTH-140, ClientLaunch.HEIGHT - 28, 60, 18, new Color(192,0,0), Color.white, "Reset", new Command(){
 			@Override
 			public void execute() {
 				initializePlayers();
@@ -68,6 +68,16 @@ public class LocalGameSetup extends GameSetup{
 	public void initializePlayers() {
 		for(int i = 0; i < 4; i++){
 			players[i] = AIPlayer.createAI(getAILevel(), i);
+		}
+	}
+	
+	public void reinitPlayers(){
+		for(int i = 0; i < 4; i++){
+			if(players[i] instanceof AIPlayer){
+				players[i] = AIPlayer.createAI(getAILevel(), i);
+			} else {
+				players[i] = new LocalPlayer(i, players[i].getName());
+			}
 		}
 	}
 	

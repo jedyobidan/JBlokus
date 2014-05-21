@@ -11,7 +11,7 @@ import jedyobidan.ui.nanim.Controller;
 public class Instructions extends Actor{
 	private int dh;
 	private int height;
-	final int MAX_HEIGHT = 100, WIDTH = 250;
+	static final int MAX_HEIGHT = 100, WIDTH = 250;
 	public Instructions(){
 		zIndex = 1;
 	}
@@ -46,8 +46,8 @@ public class Instructions extends Actor{
 
 	@Override
 	public void render(Graphics2D g) {
-		int y = Gui.HEIGHT/2 - height/2;
-		int x = Gui.WIDTH/2-WIDTH/2;
+		int y = ClientLaunch.HEIGHT/2 - height/2;
+		int x = ClientLaunch.WIDTH/2-WIDTH/2;
 		g.setClip(x, y, WIDTH, height);
 		g.setColor(new Color(0,0,0,192));
 		g.fillRect(x, y, WIDTH, height);
@@ -59,7 +59,7 @@ public class Instructions extends Actor{
 			g.drawString(s, x+2, y);
 			y+= strHeight;
 		}
-		y = Gui.WIDTH/2 - MAX_HEIGHT/2 + g.getFontMetrics().getAscent();
+		y = ClientLaunch.WIDTH/2 - MAX_HEIGHT/2 + g.getFontMetrics().getAscent();
 		g.setClip(null);
 	}
 	

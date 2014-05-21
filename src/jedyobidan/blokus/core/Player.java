@@ -1,4 +1,4 @@
-package jedyobidan.blokus.game;
+package jedyobidan.blokus.core;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -6,11 +6,11 @@ import java.util.ArrayList;
 
 public abstract class Player {
 	public final int playerID;
-	protected String name;
+	private String name;
 	protected ArrayList<Piece> pieces;
-	protected GameStage game;
-	protected Dock dock;
-	protected boolean alive;
+	private GameModel game;
+	private Dock dock;
+	private boolean alive;
 	public Player(int pid, String name){
 		this.name = name;
 		playerID = pid;
@@ -18,7 +18,7 @@ public abstract class Player {
 		for(PieceData p: PieceData.getAllPieces()){
 			pieces.add(new Piece(p, getColor()));
 		}
-		dock = new Dock(pieces, playerID);
+		dock = new Dock(pieces, this);
 		alive = true;
 	}
 	
@@ -50,9 +50,17 @@ public abstract class Player {
 		return null;
 	}
 	
-	public void joinGame(GameStage g){
+	public void joinGame(GameModel g){
 		game = g;
-		dock.addToStage(g);
+	}
+	
+	public void startTurn(){
+		dock.openDock();
+		requestMove();
+	}
+	
+	public void endTurn(){
+		dock.closeDock();
 	}
 
 	public abstract void requestMove();
@@ -70,7 +78,7 @@ public abstract class Player {
 		return dock;
 	}
 	
-	public ArrayList<Move> getPossibleMoves(Board b){
+	public ArrayList<Move> getPossibleMoves(){
 		ArrayList<Move> ans = new ArrayList<>();
 		for(Piece pc: pieces){
 			if(pc.isPlaced()) continue;
@@ -79,7 +87,7 @@ public abstract class Player {
 					Point place = new Point(x,y);
 					Piece p = pc.getCopy();
 					for(int i = 0; i < p.data.rotations; i++){
-						if(b.canPlace(p, place)){
+						if(game.getBoard().canPlace(p, place)){
 							ans.add(new Move(p, place, this));
 						}
 						p.rotateCW();
@@ -88,7 +96,7 @@ public abstract class Player {
 					if(p.data.flip){
 						p.flipHorizontal();
 						for(int i = 0; i < p.data.rotations; i++){
-							if(b.canPlace(p, place)){
+							if(game.getBoard().canPlace(p, place)){
 								ans.add(new Move(p, place, this));
 							}
 							p.rotateCW();
@@ -115,6 +123,14 @@ public abstract class Player {
 			if(!p.isPlaced()) score += p.data.basePoints.size();
 		}
 		return score;
+	}
+	
+	public boolean legal(Move m){
+		return m.legal(game);
+	}
+	
+	public void makeMove(Move m){
+		game.makeMove(m);
 	}
 
 }

@@ -1,6 +1,6 @@
 package jedyobidan.blokus.network;
 
-import jedyobidan.blokus.game.Move;
+import jedyobidan.blokus.core.Move;
 import jedyobidan.net.Message;
 
 public class MoveMessage extends Message{

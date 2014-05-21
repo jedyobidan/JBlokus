@@ -2,14 +2,13 @@ package jedyobidan.blokus.ai;
 
 import java.util.ArrayList;
 
-import jedyobidan.blokus.game.Move;
-import jedyobidan.blokus.game.Player;
+import jedyobidan.blokus.core.Move;
+import jedyobidan.blokus.core.Player;
 
 public abstract class AIPlayer extends Player implements Runnable{
 	public static final String[] AI_LEVELS = {"Random"};
-	public AIPlayer(int pid) {
-		super(pid, "");
-		name = getClass().getSimpleName() + "_" + getColorName();
+	public AIPlayer(int pid, String name) {
+		super(pid, name);
 	}
 
 	@Override
@@ -21,8 +20,8 @@ public abstract class AIPlayer extends Player implements Runnable{
 
 	@Override
 	public void run() {
-		ArrayList<Move> moves = getPossibleMoves(game.board);
-		game.makeMove(selectMove(moves));
+		ArrayList<Move> moves = getPossibleMoves();
+		makeMove(selectMove(moves));
 	}
 	
 	public abstract Move selectMove(ArrayList<Move> possibleMoves);

@@ -1,4 +1,4 @@
-package jedyobidan.blokus.game;
+package jedyobidan.blokus.core;
 
 import java.awt.Point;
 import java.io.Serializable;
@@ -21,8 +21,8 @@ public class Move implements Serializable{
 		this.playerName = player.getName();
 	}
 
-	public void execute(GameStage stage){
-		Piece piece = stage.getPiece(playerID, pieceType);
+	public void execute(GameModel game){
+		Piece piece = game.getPiece(playerID, pieceType);
 		piece.resetRotation();
 		for(String s: transformations){
 			if(s.equals("CW")){
@@ -35,12 +35,16 @@ public class Move implements Serializable{
 				piece.flipVertical();
 			}
 		}
-		if(stage.board.canPlace(piece, placement)){
-			stage.board.place(piece, placement);
+		if(legal(game)){
+			game.getBoard().place(piece, placement);
 		} else {
 			throw new IllegalArgumentException("Illegal Move");
 		}
 		piece.zIndex = 0;
+	}
+	
+	public boolean legal(GameModel game){
+		return game.getBoard().canPlace(game.getPiece(playerID, pieceType), placement);
 	}
 	
 	public String toString(){

@@ -1,4 +1,4 @@
-package jedyobidan.blokus.game;
+package jedyobidan.blokus.core;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ListIterator;
 
-import jedyobidan.blokus.Gui;
+import jedyobidan.blokus.ClientLaunch;
+import jedyobidan.blokus.local.Board;
 import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.AdvancedKey;
 import jedyobidan.ui.nanim.Controller;
@@ -20,16 +21,16 @@ import jedyobidan.ui.nanim.Stage;
 public class Dock extends Actor{
 	private ArrayList<Piece> pieces;
 	private Piece selectedPiece;
-	private int playerID;
+	private Player player;
 	private double x;
 	private int dx;
 	
 	public static final int X = Board.X + Board.SIZE + 5, WIDTH = 250;
 	
-	public Dock(Collection<Piece> pieces, int pid){
+	public Dock(Collection<Piece> pieces, Player player){
 		this.pieces = new ArrayList<Piece>(pieces);
-		playerID = pid;
-		x = Gui.WIDTH + 10;
+		this.player = player;
+		x = ClientLaunch.WIDTH + 10;
 	}
 
 	
@@ -49,6 +50,7 @@ public class Dock extends Actor{
 	}
 	
 	public void processInput(Controller c){
+		
 		ListIterator<Point> ms = c.getMousePressed().listIterator();
 		while(ms.hasNext()){
 			Point p = ms.next();
@@ -84,10 +86,9 @@ public class Dock extends Actor{
 	}
 	
 	private void mouseReleased(Point p){
-		GameStage stage = ((GameStage) getStage());
-		Board b = stage.board;
-		if(b.canPlace(selectedPiece, b.getGridCoord(p))){
-			stage.makeMove(new Move(selectedPiece, b.getGridCoord(p), stage.getPlayer(playerID)));
+		Move m = new Move(selectedPiece, Board.getGridCoord(p), player);
+		if(player.legal(m)){
+			player.makeMove(m);
 		}
 		selectedPiece = null;
 	}
@@ -99,8 +100,8 @@ public class Dock extends Actor{
 			x = X;
 			dx = 0;
 		}
-		if(x > Gui.WIDTH + 10){
-			x = Gui.WIDTH + 10;
+		if(x > ClientLaunch.WIDTH + 10){
+			x = ClientLaunch.WIDTH + 10;
 			dx = 0;
 		}
 
@@ -118,17 +119,17 @@ public class Dock extends Actor{
 
 	@Override
 	public void render(Graphics2D g) {
-		Color color = Player.getColor(playerID);
+		Color color = player.getColor();
 		float[] hsb = Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null);
 		hsb[1] *= 0.25;
 		
 		Color bg = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
 		g.setColor(bg);
-		g.fillRect((int)x, 0, WIDTH, Gui.HEIGHT);
+		g.fillRect((int)x, 0, WIDTH, ClientLaunch.HEIGHT);
 		g.setColor(color);
 		Stroke s = g.getStroke();
 		g.setStroke(new BasicStroke(2));
-		g.drawLine((int)x, 0, (int)x, Gui.HEIGHT);
+		g.drawLine((int)x, 0, (int)x, ClientLaunch.HEIGHT);
 		g.setStroke(s);
 	}
 	

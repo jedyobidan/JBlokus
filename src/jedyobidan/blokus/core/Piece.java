@@ -1,4 +1,4 @@
-package jedyobidan.blokus.game;
+package jedyobidan.blokus.core;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import jedyobidan.blokus.local.Board;
 import jedyobidan.ui.nanim.Actor;
 
 public class Piece extends Actor{
@@ -79,7 +80,8 @@ public class Piece extends Actor{
 	}
 
 	
-	void place(int xcoord, int ycoord){
+	public void place(int xcoord, int ycoord){
+		move(xcoord*16+Board.X+8, ycoord*16+Board.Y+8);
 		placed = new Point(xcoord, ycoord);
 	}
 	

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-import jedyobidan.blokus.game.Player;
+import jedyobidan.blokus.core.Player;
 import jedyobidan.blokus.network.BlokusServer;
 import jedyobidan.blokus.network.PlayerData;
 
@@ -68,6 +68,7 @@ public class ServerSetup extends JFrame{
 	
 	public void setPlayer(PlayerData p){
 		players[p.playerNum].setPlayer(p);
+		repaint();
 	}
 	
 	public void enable(){

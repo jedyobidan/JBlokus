@@ -1,4 +1,6 @@
-package jedyobidan.blokus.game;
+package jedyobidan.blokus.local;
+
+import jedyobidan.blokus.core.Player;
 
 
 public class LocalPlayer extends Player {

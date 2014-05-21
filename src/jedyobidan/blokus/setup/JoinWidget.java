@@ -3,7 +3,7 @@ package jedyobidan.blokus.setup;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 
-import jedyobidan.blokus.Gui;
+import jedyobidan.blokus.ClientLaunch;
 import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.Command;
 import jedyobidan.ui.nanim.Controller;
@@ -14,8 +14,8 @@ public abstract class JoinWidget extends Actor implements Command{
 	private Textbox joinName;
 	private Button button;
 	public JoinWidget(){
-		joinName = new Textbox(10, Gui.HEIGHT - 28, 120, 18);
-		button = new Button(135, Gui.HEIGHT - 28, 50, 18, "Join", this);
+		joinName = new Textbox(10, ClientLaunch.HEIGHT - 28, 120, 18);
+		button = new Button(135, ClientLaunch.HEIGHT - 28, 50, 18, "Join", this);
 	}
 	public void processInput(Controller c){
 		joinName.processInput(c);

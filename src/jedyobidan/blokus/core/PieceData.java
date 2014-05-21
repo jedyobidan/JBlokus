@@ -1,4 +1,4 @@
-package jedyobidan.blokus.game;
+package jedyobidan.blokus.core;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;

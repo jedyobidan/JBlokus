@@ -4,38 +4,35 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.util.ListIterator;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+
+import javax.swing.SwingUtilities;
 
 import jedyobidan.blokus.ai.AIPlayer;
-import jedyobidan.blokus.game.GameStage;
-import jedyobidan.blokus.game.Player;
+import jedyobidan.blokus.core.GameModel;
+import jedyobidan.blokus.core.Player;
+import jedyobidan.blokus.local.GameStage;
 import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.Display;
 import jedyobidan.ui.nanim.Stage;
+import jedyobidan.ui.nanim.actors.Label;
 
 public abstract class GameSetup extends Stage{
 	protected Player[] players;
 	public GameSetup(Display d) {
 		super(d);
-		addActor(new Actor(){
-			public void onStep() {}
-			public void render(Graphics2D g) {
-				g.setFont(Font.decode(null).deriveFont(Font.BOLD).deriveFont(18f));
-				g.setColor(Color.black);
-				g.drawString("Game Setup", 7, 26);
-			}
-			public Shape getHitbox() {return null;}
-			
-		});
+		addActor(new Label("Game Setup", 7, 10, Font.decode(null).deriveFont(Font.BOLD).deriveFont(18f), Color.black));
 		players = new Player[4];
 		initializePlayers();
 	}
 	
+	
 	public void beforeStep(){
-		ListIterator<Actor> it = actors.listIterator();
-		while(it.hasNext()){
-			if(it.next() instanceof PlayerInfo){
-				it.remove();
+		for(Actor a: actors){
+			if(a instanceof PlayerInfo){
+				removeActor(a);
 			}
 		}
 		for(int i = 0; i < 4; i++){
@@ -44,16 +41,46 @@ public abstract class GameSetup extends Stage{
 		super.beforeStep();
 	}
 	
+	public void addListeners(GameModel game){
+		
+	}
+	
 	public void gameStart(){
-		GameStage stage = new GameStage(getDisplay());
+		final GameModel game = new GameModel();
+		SwingUtilities.getWindowAncestor(getDisplay()).addWindowListener(new WindowAdapter(){
+			public void windowClosed(WindowEvent e){
+				game.stop();
+			}
+		});
 		for(Player p: players){
-			stage.addPlayer(p);
+			game.addPlayer(p);
 		}
+		addListeners(game);
+		
+		GameStage stage = new GameStage(getDisplay());
+		for(Player p: game.getPlayers()){
+			p.getDock().addToStage(stage);
+		}
+		game.addObserver(stage);
 		this.getDisplay().addStage("GAME", stage);
-		stage.startGame();
+		
+		new Thread(){
+			public void run(){
+				setPriority(Thread.MIN_PRIORITY);
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				game.startGame();
+			}
+		}.start();
+		
 	}
 	
 	public abstract void initializePlayers();
+	
+	public abstract void reinitPlayers();
 	
 	protected int getAvailable(){
 		for(int i = 0; i < 4; i++){
@@ -63,4 +90,5 @@ public abstract class GameSetup extends Stage{
 		}
 		return -1;
 	}
+	
 }

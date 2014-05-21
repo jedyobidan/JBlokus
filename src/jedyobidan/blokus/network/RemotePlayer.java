@@ -1,7 +1,7 @@
 package jedyobidan.blokus.network;
 
-import jedyobidan.blokus.game.Move;
-import jedyobidan.blokus.game.Player;
+import jedyobidan.blokus.core.Move;
+import jedyobidan.blokus.core.Player;
 import jedyobidan.net.Message;
 import jedyobidan.net.MessageObserver;
 
@@ -26,7 +26,7 @@ public class RemotePlayer extends Player implements MessageObserver{
 		if(move != null && waiting){
 			waiting = false;
 			move = null;
-			game.makeMove(move);
+			makeMove(move);
 			return true;
 		} else {
 			return false;

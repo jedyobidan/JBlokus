@@ -18,11 +18,11 @@ import javax.swing.SpinnerNumberModel;
 import jedyobidan.blokus.ai.AIPlayer;
 import jedyobidan.blokus.network.BlokusServer;
 
-public class ServerInit extends JFrame{
+public class ServerLaunch extends JFrame{
 	private JComboBox<String> aiLevel;
 	private JSpinner port;
 	
-	public ServerInit(){
+	public ServerLaunch(){
 		super("JBlokus Server");
 		JComponent panel = Box.createVerticalBox();
 			JComponent portC = new JPanel();
@@ -68,6 +68,6 @@ public class ServerInit extends JFrame{
 	}
 	
 	public static void main(String[] args){
-		new ServerInit().setVisible(true);
+		new ServerLaunch().setVisible(true);
 	}
 }

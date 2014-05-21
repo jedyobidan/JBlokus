@@ -24,6 +24,7 @@ public class BlokusServer extends Server {
 		super();
 		this.aiLevel = aiLevel;
 		this.port = port;
+		this.writeToLog = true;
 		players = new Player[4];
 		playerData = new PlayerData[4];
 		for(int i = 0; i < 4; i++){

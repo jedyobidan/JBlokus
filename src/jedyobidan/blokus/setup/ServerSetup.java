@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.*;
 
@@ -25,7 +27,11 @@ public class ServerSetup extends JFrame{
 		
 		Box box = Box.createHorizontalBox();
 			box.add(Box.createHorizontalStrut(2));
-			box.add(new JLabel("Port: " + s.getPort()));
+			try {
+				box.add(new JLabel("IP: " + InetAddress.getLocalHost().getHostAddress() + ":" + s.getPort()));
+			} catch (UnknownHostException e2) {
+				e2.printStackTrace();
+			}
 			box.add(Box.createHorizontalGlue());
 			box.add(new JLabel("AI Level: " + s.getAILevel()));
 			box.add(Box.createHorizontalStrut(2));

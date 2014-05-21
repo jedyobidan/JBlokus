@@ -6,6 +6,7 @@ import jedyobidan.blokus.game.Move;
 import jedyobidan.blokus.game.Player;
 
 public abstract class AIPlayer extends Player implements Runnable{
+	public static final String[] AI_LEVELS = {"Random"};
 	public AIPlayer(int pid) {
 		super(pid, "");
 		name = getClass().getSimpleName() + "_" + getColorName();

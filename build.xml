@@ -2,8 +2,9 @@
 <project default="client" name="Create Runnable Jar for Project JBlokus">
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
+	<input message = "Version=" addproperty="version" />
     <target name="client">
-        <jar destfile="JBlokus/dist/JBlokus.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="JBlokus/dist/JBlokus_v${version}/JBlokus.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="jedyobidan.blokus.ClientLaunch"/>
                 <attribute name="Class-Path" value="."/>
@@ -13,7 +14,7 @@
         </jar>
     </target>
 	<target name="server">
-	        <jar destfile="JBlokus/dist/JBlokus_Server.jar" filesetmanifest="mergewithoutmain">
+	        <jar destfile="JBlokus/dist/JBlokus_v${version}/JBlokus_Server.jar" filesetmanifest="mergewithoutmain">
 	            <manifest>
 	                <attribute name="Main-Class" value="jedyobidan.blokus.ClientLaunch"/>
 	                <attribute name="Class-Path" value="."/>

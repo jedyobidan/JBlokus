@@ -74,6 +74,7 @@ public class GameModel {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		players.get(0).generatePossibleMoves();
 		startTurn(players.get(0));
 	}
 	

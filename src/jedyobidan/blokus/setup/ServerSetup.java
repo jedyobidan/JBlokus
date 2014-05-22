@@ -67,15 +67,13 @@ public class ServerSetup extends JFrame implements GameObserver{
 		start.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				start.setEnabled(false);
-				start.setText("Playing...");
 				s.startGame();
 			}
 		});
 		start.setFocusPainted(false);
 		JPanel bot = new JPanel(new BorderLayout());
 			bot.add(scroll);
-			bot.add(start, BorderLayout.SOUTH);
+//			bot.add(start, BorderLayout.SOUTH);
 		add(bot, BorderLayout.SOUTH);
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -98,9 +96,18 @@ public class ServerSetup extends JFrame implements GameObserver{
 		repaint();
 	}
 	
+	public void setReady(int pnum, boolean ready){
+		players[pnum].ready(ready);
+	}
+	
 	public void enable(){
 		start.setText("Start Game");
 		start.setEnabled(true);
+	}
+	
+	public void disable(){
+		start.setEnabled(false);
+		start.setText("Playing...");
 	}
 	
 	private class PlayerComponent extends JLabel{
@@ -120,6 +127,14 @@ public class ServerSetup extends JFrame implements GameObserver{
 		}
 		public void onTurn(boolean turn){
 			this.setBorder(BorderFactory.createLineBorder(Player.getColor(player.playerNum), turn?4:2));
+		}
+		
+		public void ready(boolean ready){
+			if(ready){
+				this.setFont(getFont().deriveFont(Font.ITALIC + Font.BOLD));
+			} else {
+				this.setFont(getFont().deriveFont(Font.BOLD));
+			}
 		}
 	}
 

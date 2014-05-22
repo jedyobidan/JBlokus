@@ -19,8 +19,10 @@ public class RemotePlayer extends Player implements MessageObserver{
 	public void aiOverride(){
 		aiOverride = true;
 		if(waiting){
+			generatePossibleMoves();
 			move = aiOverrideMove();
 		}
+		tryMove();
 	}
 	@Override
 	public void messageRecieved(Message m) {

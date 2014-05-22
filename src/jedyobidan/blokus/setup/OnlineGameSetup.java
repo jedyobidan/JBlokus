@@ -17,6 +17,7 @@ import jedyobidan.blokus.network.GameStart;
 import jedyobidan.blokus.network.JoinRequest;
 import jedyobidan.blokus.network.PlayerData;
 import jedyobidan.blokus.network.PlayerListRequest;
+import jedyobidan.blokus.network.ReadyMessage;
 import jedyobidan.blokus.network.RemotePlayer;
 import jedyobidan.net.Client;
 import jedyobidan.net.Message;
@@ -29,9 +30,9 @@ import jedyobidan.ui.nanim.actors.Button;
 
 public class OnlineGameSetup extends GameSetup implements MessageObserver{
 	private JoinWidget join;
-	private Button drop;
+	private Button drop, readyButton;
 	private BlokusClient client;
-	private int pnum;
+	private int pnum = -1;
 	public OnlineGameSetup(Display d, BlokusClient c) {
 		super(d);
 		client = c;
@@ -48,7 +49,6 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 		drop = new Button(10, ClientLaunch.HEIGHT - 28, 60, 18, new Color(192,0,0), Color.white, "Drop out", new Command(){
 			@Override
 			public void execute() {
-				System.out.println("Got drop request");
 				client.sendMessage(new DropRequest(client.getClientID()));
 				removeActor(drop);
 				addActor(join);
@@ -62,6 +62,12 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+			}
+		});
+		readyButton = new Button(ClientLaunch.WIDTH-70, ClientLaunch.HEIGHT - 28, 60, 18, "Ready!", new Command(){
+			@Override
+			public void execute() {
+				client.sendMessage(new ReadyMessage(client.getClientID(), pnum, true));
 			}
 		});
 	}
@@ -84,7 +90,8 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 			if(old instanceof RemotePlayer){
 				client.removeObserver((MessageObserver) old);
 			} else if (old instanceof LocalPlayer){
-				pnum = 0;
+				pnum = -1;
+				removeActor(readyButton);
 			}
 			if(data.clientID == client.getClientID()){
 				players[data.playerNum] = new LocalPlayer(data.playerNum, data.name);
@@ -98,6 +105,15 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 			}
 		} else if (m instanceof GameStart){
 			startGame();
+		} else if (m instanceof ReadyMessage){
+			ready[((ReadyMessage) m).pnum] = ((ReadyMessage) m).ready;
+			if(((ReadyMessage) m).pnum == pnum){
+				if(((ReadyMessage) m).ready){
+					removeActor(readyButton);
+				} else if(!actors.contains(readyButton)){
+					addActor(readyButton);
+				}
+			}
 		}
 	}
 	
@@ -113,6 +129,9 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 		}
 		if(actors.contains(join)){
 			join.processInput(c);
+		}
+		if(actors.contains(readyButton)){
+			readyButton.processInput(c);
 		}
 		c.consumeAll();
 	}

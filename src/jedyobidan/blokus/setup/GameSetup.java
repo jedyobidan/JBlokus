@@ -24,10 +24,12 @@ import jedyobidan.ui.nanim.actors.Label;
 public abstract class GameSetup extends Stage implements GameObserver{
 	protected Player[] players;
 	protected GameModel game;
+	protected boolean[] ready;
 	public GameSetup(Display d) {
 		super(d);
 		addActor(new Label("Game Setup", 7, 10, Font.decode(null).deriveFont(Font.BOLD).deriveFont(18f), Color.black));
 		players = new Player[4];
+		ready = new boolean[4];
 		initializePlayers();
 	}
 	
@@ -39,7 +41,7 @@ public abstract class GameSetup extends Stage implements GameObserver{
 			}
 		}
 		for(int i = 0; i < 4; i++){
-			addActor(new PlayerInfo(40+45*i, players[i]));
+			addActor(new PlayerInfo(40+55*i, players[i], ready[i]));
 		}
 		super.beforeStep();
 	}

@@ -16,6 +16,7 @@ import jedyobidan.net.Server;
 public class BlokusServer extends Server implements GameObserver{
 	private Player[] players;
 	private PlayerData[] playerData;
+	private boolean[] readyState;
 	private String aiLevel;
 	private ServerSetup serverSetup;
 	private int port;
@@ -30,6 +31,7 @@ public class BlokusServer extends Server implements GameObserver{
 		this.writeToLog = true;
 		players = new Player[4];
 		playerData = new PlayerData[4];
+		readyState = new boolean[4];
 		for(int i = 0; i < 4; i++){
 			AIPlayer p = AIPlayer.createAI(aiLevel, i);
 			players[i] = p;
@@ -62,6 +64,31 @@ public class BlokusServer extends Server implements GameObserver{
 			for(PlayerData message: playerData){
 				sendMessage(m.origin, message);
 			}
+			for(int i = 0; i < 4; i++){
+				sendMessage(m.origin, new ReadyMessage(0, i, readyState[i]));
+			}
+		} else if (m instanceof ReadyMessage){
+			readyState[((ReadyMessage) m).pnum] = ((ReadyMessage) m).ready;
+			serverSetup.setReady(((ReadyMessage) m).pnum, ((ReadyMessage) m).ready);
+			broadcastMessage(m);
+			
+			boolean start = true;
+			for(int i = 0; i < 4; i++){
+				if(!readyState[i] && !(players[i] instanceof AIPlayer)){
+					start = false;
+				}
+			}
+			if(start){
+				startGame();
+			}
+		}
+	}
+	
+	public void unready(){
+		for(int i = 0; i < 4; i++){
+			readyState[i] = false;
+			serverSetup.setReady(i, false);
+			broadcastMessage(new ReadyMessage(0,i, false));
 		}
 	}
 	
@@ -75,6 +102,7 @@ public class BlokusServer extends Server implements GameObserver{
 		broadcastMessage(playerData[pid]);
 		serverSetup.setPlayer(playerData[pid]);
 		System.out.println("SERVER: Added " + playerData[pid]);
+		unready();
 		return true;
 	}
 	
@@ -94,12 +122,14 @@ public class BlokusServer extends Server implements GameObserver{
 					serverSetup.appendMessage(old.getName() + " has left the game!");
 				}
 				System.out.println("SERVER: Player " + i + " dropped");
+				unready();
 			}
 		}
 	}
 	
 	public void startGame(){
 		stopAccepting();
+		serverSetup.disable();
 		game = new GameModel();
 		serverSetup.addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent w){
@@ -157,6 +187,7 @@ public class BlokusServer extends Server implements GameObserver{
 	public void gameEnd(GameModel game) {
 		acceptConnections(port);
 		game = null;
+		unready();
 		for(PlayerData p: playerData){
 			serverSetup.setPlayer(p);
 		}

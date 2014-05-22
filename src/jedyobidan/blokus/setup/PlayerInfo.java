@@ -14,13 +14,15 @@ import jedyobidan.ui.nanim.Actor;
 public class PlayerInfo extends Actor{
 	private Player player;
 	private int y;
+	private boolean ready;
 	
-	public static final int HEIGHT = 40;
+	public static final int HEIGHT = 50;
 	public static final Font FONT = Font.decode(null).deriveFont(Font.BOLD).deriveFont(16f);
 	
-	public PlayerInfo(int y, Player p){
+	public PlayerInfo(int y, Player p, boolean ready){
 		this.y = y;
 		player = p;
+		this.ready = ready;
 	}
 	
 	@Override
@@ -41,10 +43,14 @@ public class PlayerInfo extends Actor{
 		
 		g.setColor(Color.white);
 		g.setFont(FONT);
-		g.drawString(player.getName(), 10, y+28);
+		g.drawString(player.getName(), 10, y+21);
 		g.setFont(Font.decode(null));
 		String code = player.getClass().getSimpleName();
 		g.drawString(code, ClientLaunch.WIDTH-12-g.getFontMetrics().stringWidth(code), y+2+g.getFontMetrics().getAscent());
+		if(ready){
+			g.setFont(Font.decode(null).deriveFont(Font.ITALIC));
+			g.drawString("Ready!", 10, y+39);
+		}
 	}
 
 	@Override

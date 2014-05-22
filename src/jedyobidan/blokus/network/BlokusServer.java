@@ -186,8 +186,18 @@ public class BlokusServer extends Server implements GameObserver{
 	@Override
 	public void gameEnd(GameModel game) {
 		acceptConnections(port);
-		game = null;
+		this.game = null;
 		unready();
+		for(int i = 0; i < players.length; i++){
+			if(players[i] instanceof RemotePlayer){
+				removeObserver((RemotePlayer)players[i]);
+				RemotePlayer player = new RemotePlayer(i, players[i].getName());
+				addObserver(player);
+				players[i] = player;
+			} else {
+				players[i] = AIPlayer.createAI(aiLevel, i);
+			}
+		}
 		for(PlayerData p: playerData){
 			serverSetup.setPlayer(p);
 		}

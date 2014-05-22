@@ -89,6 +89,9 @@ public class GameModel {
 		for(GameObserver ob: observers){
 			ob.gameEnd(this);
 		}
+		for(Player p: players){
+			p.joinGame(null);
+		}
 	}
 	
 	public Player getWinner(){

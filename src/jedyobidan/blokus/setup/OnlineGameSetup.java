@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import jedyobidan.blokus.ClientLaunch;
 import jedyobidan.blokus.core.GameModel;
 import jedyobidan.blokus.core.Player;
+import jedyobidan.blokus.local.GameStage;
 import jedyobidan.blokus.local.LocalPlayer;
 import jedyobidan.blokus.network.BlokusClient;
 import jedyobidan.blokus.network.DropRequest;
@@ -19,10 +20,8 @@ import jedyobidan.blokus.network.PlayerData;
 import jedyobidan.blokus.network.PlayerListRequest;
 import jedyobidan.blokus.network.ReadyMessage;
 import jedyobidan.blokus.network.RemotePlayer;
-import jedyobidan.net.Client;
 import jedyobidan.net.Message;
 import jedyobidan.net.MessageObserver;
-import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.Command;
 import jedyobidan.ui.nanim.Controller;
 import jedyobidan.ui.nanim.Display;
@@ -117,10 +116,22 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 		}
 	}
 	
-	public void addListeners(GameModel game){
+	public GameModel getGameModel(){
+		GameModel game = super.getGameModel();
 		client.setPlayerNum(pnum);
 		game.addObserver(client);
-		
+		return game;
+	}
+	
+	public GameStage getGameStage(GameModel game){
+		GameStage stage = super.getGameStage(game);
+		client.addObserver(stage);
+		return stage;
+	}
+	
+	public void startGame(){
+		client.setPlayerNum(pnum);
+		super.startGame();
 	}
 	
 	public void processInput(Controller c){

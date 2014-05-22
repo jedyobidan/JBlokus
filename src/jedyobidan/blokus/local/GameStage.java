@@ -2,6 +2,7 @@ package jedyobidan.blokus.local;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import jedyobidan.blokus.ClientLaunch;
 import jedyobidan.blokus.core.Dock;
@@ -24,11 +25,12 @@ import jedyobidan.ui.nanim.actors.TextFlyBanner;
 public class GameStage extends Stage implements GameObserver, MessageObserver{
 	public static boolean VERBOSE = true;
 	private MessageBox messageBox;
-	private Dock currentDock;
+	private ArrayList<Dock> docks;
 	
 	public GameStage(Display d) {
 		super(d);
 		this.addActor(new Board());
+		docks = new ArrayList<Dock>();
 		
 		addActor(new FPSDisplay());
 		
@@ -37,20 +39,25 @@ public class GameStage extends Stage implements GameObserver, MessageObserver{
 				ClientLaunch.HEIGHT - (Board.Y + Board.SIZE + 5) - 5,
 				Font.decode("Consolas-12"));
 		this.addActor(messageBox);
+		
 	}
 	
 	public void processInput(Controller c){
-		if(currentDock!=null){
-			currentDock.processInput(c);
+		for(Dock d: docks){
+			d.processInput(c);
 		}
 		c.consumeAll();
+	}
+	
+	public void addDock(Dock d){
+		docks.add(d);
+		addActor(d);
 	}
 	
 	
 	@Override
 	public void turnStart(Player p) {
-		if(p instanceof LocalPlayer)
-			currentDock = p.getDock();
+		
 	}
 
 	@Override
@@ -66,7 +73,6 @@ public class GameStage extends Stage implements GameObserver, MessageObserver{
 
 	@Override
 	public void gameEnd(GameModel game) {
-		currentDock = null;
 		messageBox.addMessage("SCORE");
 		for(Player p: game.getPlayers()){
 			messageBox.addMessage(p.getName() + ": " + p.score());

@@ -13,6 +13,7 @@ import java.util.ListIterator;
 
 import jedyobidan.blokus.ClientLaunch;
 import jedyobidan.blokus.local.Board;
+import jedyobidan.blokus.local.LocalPlayer;
 import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.AdvancedKey;
 import jedyobidan.ui.nanim.Controller;
@@ -34,8 +35,9 @@ public class Dock extends Actor{
 	}
 
 	
-	public void addToStage(Stage s){
-		s.addActor(this);
+	protected void setStage(Stage s){
+		super.setStage(s);
+		if(s == null) return;
 		for(Piece p: pieces){
 			s.addActor(p);
 		}
@@ -50,7 +52,7 @@ public class Dock extends Actor{
 	}
 	
 	public void processInput(Controller c){
-		
+		if(x != X || !(player instanceof LocalPlayer)) return;
 		ListIterator<Point> ms = c.getMousePressed().listIterator();
 		while(ms.hasNext()){
 			Point p = ms.next();

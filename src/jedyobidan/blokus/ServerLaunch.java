@@ -17,6 +17,7 @@ import javax.swing.SpinnerNumberModel;
 
 import jedyobidan.blokus.ai.AIPlayer;
 import jedyobidan.blokus.network.BlokusServer;
+import jedyobidan.debug.StdRedirect;
 
 public class ServerLaunch extends JFrame{
 	private JComboBox<String> aiLevel;
@@ -68,6 +69,7 @@ public class ServerLaunch extends JFrame{
 	}
 	
 	public static void main(String[] args){
+		StdRedirect.redirectAllInJar();
 		new ServerLaunch().setVisible(true);
 	}
 }

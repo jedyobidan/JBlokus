@@ -23,7 +23,7 @@ import jedyobidan.ui.nanim.actors.Label;
 
 public abstract class GameSetup extends Stage implements GameObserver{
 	protected Player[] players;
-	protected GameModel game;
+	private GameModel game;
 	protected boolean[] ready;
 	public GameSetup(Display d) {
 		super(d);
@@ -46,17 +46,8 @@ public abstract class GameSetup extends Stage implements GameObserver{
 		super.beforeStep();
 	}
 	
-	public void addListeners(GameModel game){
-		
-	}
-	
-	public void stopGame(){
-		if(game!= null)
-			game.stop();
-	}
-	
-	public void startGame(){
-		game = new GameModel();
+	public GameModel getGameModel(){
+		GameModel game = new GameModel();
 		SwingUtilities.getWindowAncestor(getDisplay()).addWindowListener(new WindowAdapter(){
 			public void windowClosed(WindowEvent e){
 				stopGame();
@@ -66,20 +57,32 @@ public abstract class GameSetup extends Stage implements GameObserver{
 			game.addPlayer(p);
 		}
 		game.addObserver(this);
-		addListeners(game);
-		
+		return game;
+	}
+	
+	public GameStage getGameStage(GameModel game){
 		GameStage stage = new GameStage(getDisplay());
 		for(Player p: game.getPlayers()){
-			p.getDock().addToStage(stage);
+			stage.addDock(p.getDock());
 		}
 		game.addObserver(stage);
-		this.getDisplay().addStage("GAME", stage);
+		return stage;
+	}
+	
+	public void stopGame(){
+		if(game!= null)
+			game.stop();
+	}
+	
+	public void startGame(){
+		game = getGameModel();
+		this.getDisplay().addStage("GAME", getGameStage(game));
 		
 		new Thread(){
 			public void run(){
 				setPriority(Thread.MIN_PRIORITY);
 				try {
-					Thread.sleep(200);
+					Thread.sleep(500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -127,7 +130,7 @@ public abstract class GameSetup extends Stage implements GameObserver{
 
 	@Override
 	public void gameEnd(GameModel game) {
-		game = null;
+		this.game = null;
 	}
 	
 	

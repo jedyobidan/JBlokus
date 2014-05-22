@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.ConnectException;
 
 import jedyobidan.blokus.network.BlokusClient;
 import jedyobidan.blokus.network.BlokusServer;
@@ -73,7 +74,8 @@ public class TitleScreen extends Stage{
 			client = new BlokusClient(ip.getText(), Integer.parseInt(port.getText()), d);
 			d.addStage("SETUP", new OnlineGameSetup(d, client));
 		} catch(Exception e){
-			e.printStackTrace();
+			if(!(e instanceof ConnectException))
+				e.printStackTrace();
 			if(client!=null){
 				try {
 					client.close();

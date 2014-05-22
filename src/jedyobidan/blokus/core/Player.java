@@ -11,6 +11,7 @@ public abstract class Player {
 	private GameModel game;
 	private Dock dock;
 	private boolean alive;
+	protected ArrayList<Move> possibleMoves;
 	public Player(int pid, String name){
 		this.name = name;
 		playerID = pid;
@@ -78,7 +79,7 @@ public abstract class Player {
 		return dock;
 	}
 	
-	public ArrayList<Move> getPossibleMoves(){
+	public ArrayList<Move> generatePossibleMoves(){
 		ArrayList<Move> ans = new ArrayList<>();
 		for(Piece pc: pieces){
 			if(pc.isPlaced()) continue;
@@ -106,6 +107,7 @@ public abstract class Player {
 				}
 			}
 		}
+		possibleMoves = ans;
 		return ans;
 	}
 	

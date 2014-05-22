@@ -11,7 +11,7 @@ public class RandomAI extends AIPlayer {
 	}
 
 	@Override
-	public Move selectMove(ArrayList<Move> possibleMoves) {
+	public Move selectMove() {
 		try {
 			Thread.sleep(500);
 		} catch (InterruptedException e) {

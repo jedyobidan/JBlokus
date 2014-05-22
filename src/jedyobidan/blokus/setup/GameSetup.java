@@ -12,6 +12,8 @@ import javax.swing.SwingUtilities;
 
 import jedyobidan.blokus.ai.AIPlayer;
 import jedyobidan.blokus.core.GameModel;
+import jedyobidan.blokus.core.GameObserver;
+import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
 import jedyobidan.blokus.local.GameStage;
 import jedyobidan.ui.nanim.Actor;
@@ -19,8 +21,9 @@ import jedyobidan.ui.nanim.Display;
 import jedyobidan.ui.nanim.Stage;
 import jedyobidan.ui.nanim.actors.Label;
 
-public abstract class GameSetup extends Stage{
+public abstract class GameSetup extends Stage implements GameObserver{
 	protected Player[] players;
+	protected GameModel game;
 	public GameSetup(Display d) {
 		super(d);
 		addActor(new Label("Game Setup", 7, 10, Font.decode(null).deriveFont(Font.BOLD).deriveFont(18f), Color.black));
@@ -45,16 +48,22 @@ public abstract class GameSetup extends Stage{
 		
 	}
 	
-	public void gameStart(){
-		final GameModel game = new GameModel();
+	public void stopGame(){
+		if(game!= null)
+			game.stop();
+	}
+	
+	public void startGame(){
+		game = new GameModel();
 		SwingUtilities.getWindowAncestor(getDisplay()).addWindowListener(new WindowAdapter(){
 			public void windowClosed(WindowEvent e){
-				game.stop();
+				stopGame();
 			}
 		});
 		for(Player p: players){
 			game.addPlayer(p);
 		}
+		game.addObserver(this);
 		addListeners(game);
 		
 		GameStage stage = new GameStage(getDisplay());
@@ -90,5 +99,35 @@ public abstract class GameSetup extends Stage{
 		}
 		return -1;
 	}
+	
+	public void gameStart(){
+		
+	}
+
+
+	@Override
+	public void turnStart(Player p) {
+		
+	}
+
+
+	@Override
+	public void moveMade(Move m) {
+		
+	}
+
+
+	@Override
+	public void noMoves(Player p) {
+		
+	}
+
+
+	@Override
+	public void gameEnd(GameModel game) {
+		game = null;
+	}
+	
+	
 	
 }

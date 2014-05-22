@@ -10,7 +10,10 @@ import jedyobidan.blokus.core.GameObserver;
 import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Piece;
 import jedyobidan.blokus.core.Player;
+import jedyobidan.blokus.network.PlayerDropped;
 import jedyobidan.blokus.setup.GameSetup;
+import jedyobidan.net.Message;
+import jedyobidan.net.MessageObserver;
 import jedyobidan.ui.nanim.Controller;
 import jedyobidan.ui.nanim.Display;
 import jedyobidan.ui.nanim.Stage;
@@ -18,7 +21,7 @@ import jedyobidan.ui.nanim.actors.FPSDisplay;
 import jedyobidan.ui.nanim.actors.MessageBox;
 import jedyobidan.ui.nanim.actors.TextFlyBanner;
 
-public class GameStage extends Stage implements GameObserver{
+public class GameStage extends Stage implements GameObserver, MessageObserver{
 	public static boolean VERBOSE = true;
 	private MessageBox messageBox;
 	private Dock currentDock;
@@ -46,8 +49,8 @@ public class GameStage extends Stage implements GameObserver{
 	
 	@Override
 	public void turnStart(Player p) {
-		System.out.println(p.getName());
-		currentDock = p.getDock();
+		if(p instanceof LocalPlayer)
+			currentDock = p.getDock();
 	}
 
 	@Override
@@ -89,6 +92,13 @@ public class GameStage extends Stage implements GameObserver{
 					}
 		});
 		
+	}
+
+	@Override
+	public void messageRecieved(Message m) {
+		if(m instanceof PlayerDropped){
+			messageBox.addMessage(((PlayerDropped) m).name + " has left the game!");
+		}
 	}
 
 

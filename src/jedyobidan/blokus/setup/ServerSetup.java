@@ -3,7 +3,9 @@ package jedyobidan.blokus.setup;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -13,14 +15,21 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import javax.swing.*;
+import javax.swing.text.DefaultCaret;
 
+import jedyobidan.blokus.core.GameModel;
+import jedyobidan.blokus.core.GameObserver;
+import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
 import jedyobidan.blokus.network.BlokusServer;
 import jedyobidan.blokus.network.PlayerData;
+import jedyobidan.borrowed.SmartScroller;
 
-public class ServerSetup extends JFrame{
+public class ServerSetup extends JFrame implements GameObserver{
 	private PlayerComponent[] players;
 	private JButton start;
+	private JTextArea moveLog;
+	private JScrollPane scroll;
 	public ServerSetup(final BlokusServer s){
 		super("JBlokus Server");
 		players = new PlayerComponent[4];
@@ -45,6 +54,15 @@ public class ServerSetup extends JFrame{
 		}
 		add(playerC);
 		
+		
+			
+		scroll = new JScrollPane(moveLog = new JTextArea("Welcome to the server!", 5, 15));
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		moveLog.setEditable(false);
+		moveLog.setFont(Font.decode("Consolas-12"));
+		moveLog.setMargin(new Insets(1,1,1,1));
+		new SmartScroller(scroll);
+		
 		start = new JButton("Start Game");
 		start.addActionListener(new ActionListener(){
 			@Override
@@ -55,7 +73,10 @@ public class ServerSetup extends JFrame{
 			}
 		});
 		start.setFocusPainted(false);
-		add(start, BorderLayout.SOUTH);
+		JPanel bot = new JPanel(new BorderLayout());
+			bot.add(scroll);
+			bot.add(start, BorderLayout.SOUTH);
+		add(bot, BorderLayout.SOUTH);
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter(){
@@ -83,17 +104,63 @@ public class ServerSetup extends JFrame{
 	}
 	
 	private class PlayerComponent extends JLabel{
+		private PlayerData player;
 		public PlayerComponent(){
 			this.setOpaque(true);
 			this.setHorizontalAlignment(CENTER);
 			this.setPreferredSize(new Dimension(150,60));
 		}
 		public void setPlayer(PlayerData p){
+			player = p;
 			this.setText(p.name+ " : " + p.clientID);
 			Color c = Player.getColor(p.playerNum);
 			this.setBorder(BorderFactory.createLineBorder(c, 2));
 			float[] hsb = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
 			this.setBackground(Color.getHSBColor(hsb[0], hsb[1]/4, hsb[2]));
 		}
+		public void onTurn(boolean turn){
+			this.setBorder(BorderFactory.createLineBorder(Player.getColor(player.playerNum), turn?4:2));
+		}
+	}
+
+	@Override
+	public void turnStart(Player p) {
+		for(int i = 0; i < 4; i++){
+			players[i].onTurn(i == p.playerID);
+		}
+		repaint();
+	}
+
+	@Override
+	public void moveMade(final Move m) {
+		appendMessage(m.toString());
+	}
+
+	@Override
+	public void noMoves(Player p) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void gameEnd(GameModel game) {
+		enable();
+		appendMessage(game.getWinner().getName() + " is the winner!");
+	}
+
+	@Override
+	public void gameStart() {
+		appendMessage("--Game Start--");
+		
+	}
+	
+	public void appendMessage(final String message){
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run() {
+				moveLog.append("\n" + message);
+				repaint();
+			}
+		});
 	}
 }

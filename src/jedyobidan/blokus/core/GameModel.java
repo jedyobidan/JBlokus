@@ -44,7 +44,7 @@ public class GameModel {
 			endGame();
 		} else {
 			Player p = players.get(turnCt%4);
-			if(alive.contains(p) && p.getPossibleMoves().size()!= 0){
+			if(alive.contains(p) && p.generatePossibleMoves().size()!= 0){
 				startTurn(p);
 			} else {
 				for(GameObserver o: observers){

@@ -1,22 +1,25 @@
 package jedyobidan.blokus.network;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
 
 import jedyobidan.blokus.ai.AIPlayer;
+import jedyobidan.blokus.core.GameModel;
+import jedyobidan.blokus.core.GameObserver;
+import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
-import jedyobidan.blokus.local.*;
 import jedyobidan.blokus.setup.ServerSetup;
 import jedyobidan.net.Message;
 import jedyobidan.net.Server;
 
-public class BlokusServer extends Server {
+public class BlokusServer extends Server implements GameObserver{
 	private Player[] players;
 	private PlayerData[] playerData;
 	private String aiLevel;
 	private ServerSetup serverSetup;
 	private int port;
+	private GameModel game;
 	
 	public static final int DEFAULT_PORT = 4031;
 	
@@ -78,18 +81,40 @@ public class BlokusServer extends Server {
 	public void dropPlayer(int clientID){
 		for(int i = 0; i < 4; i++){
 			if(playerData[i].clientID == clientID){
-				removeObserver((RemotePlayer) players[i]);
+				RemotePlayer old = (RemotePlayer)players[i];
+				removeObserver(old);
 				players[i] = AIPlayer.createAI(aiLevel, i);
 				playerData[i] = new PlayerData(players[i].getName(), i, 0);
-				broadcastMessage(playerData[i]);
-				serverSetup.setPlayer(playerData[i]);
+				if(game==null) {
+					broadcastMessage(playerData[i]);
+					serverSetup.setPlayer(playerData[i]);
+				} else {
+					old.aiOverride();
+					broadcastMessage(new PlayerDropped(old));
+					serverSetup.appendMessage(old.getName() + " has left the game!");
+				}
 				System.out.println("SERVER: Player " + i + " dropped");
 			}
 		}
 	}
 	
 	public void startGame(){
+		stopAccepting();
+		game = new GameModel();
+		serverSetup.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent w){
+				if(game!=null) game.stop();
+			}
+		});
+		for(Player p: players){
+			game.addPlayer(p);
+		}
+		game.addObserver(this);
+		game.addObserver(serverSetup);
 		
+		
+		game.startGame();
+		broadcastMessage(new GameStart());
 	}
 	
 	protected int getAvailable(){
@@ -111,6 +136,35 @@ public class BlokusServer extends Server {
 	
 	public String getAILevel(){
 		return aiLevel;
+	}
+
+	@Override
+	public void turnStart(Player p) {
+		
+	}
+
+	@Override
+	public void moveMade(Move m) {
+		broadcastMessage(new MoveMessage(0, m));
+	}
+
+	@Override
+	public void noMoves(Player p) {
+		
+	}
+
+	@Override
+	public void gameEnd(GameModel game) {
+		acceptConnections(port);
+		game = null;
+		for(PlayerData p: playerData){
+			serverSetup.setPlayer(p);
+		}
+	}
+
+	@Override
+	public void gameStart() {
+		
 	}
 
 }

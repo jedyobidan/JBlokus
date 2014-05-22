@@ -33,7 +33,7 @@ public class LocalGameSetup extends GameSetup{
 		start = new Button(ClientLaunch.WIDTH-70, ClientLaunch.HEIGHT - 28, 60, 18, "Start", new Command(){
 			@Override
 			public void execute() {
-				gameStart();
+				startGame();
 			}
 		});
 		addActor(start);

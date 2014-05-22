@@ -8,11 +8,12 @@ import java.awt.Shape;
 import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.Controller;
 
-public class Instructions extends Actor{
+public class TitleDialog extends Actor{
 	private int dh;
 	private int height;
+	private String text;
 	static final int MAX_HEIGHT = 100, WIDTH = 250;
-	public Instructions(){
+	public TitleDialog(){
 		zIndex = 1;
 	}
 	@Override
@@ -28,8 +29,9 @@ public class Instructions extends Actor{
 		}
 	}
 	
-	public void open(){
+	public void open(String text){
 		dh = 750;
+		this.text = text;
 	}
 	
 	public void close(){
@@ -46,6 +48,7 @@ public class Instructions extends Actor{
 
 	@Override
 	public void render(Graphics2D g) {
+		if(height == 0) return;
 		int y = ClientLaunch.HEIGHT/2 - height/2;
 		int x = ClientLaunch.WIDTH/2-WIDTH/2;
 		g.setClip(x, y, WIDTH, height);
@@ -55,21 +58,12 @@ public class Instructions extends Actor{
 		g.setColor(Color.white);
 		int strHeight = g.getFontMetrics().getHeight();
 		y+= g.getFontMetrics().getAscent()+2;
-		for(String s: getText().split("\\n")){
+		for(String s: text.split("\\n")){
 			g.drawString(s, x+2, y);
 			y+= strHeight;
 		}
 		y = ClientLaunch.WIDTH/2 - MAX_HEIGHT/2 + g.getFontMetrics().getAscent();
 		g.setClip(null);
-	}
-	
-	public String getText(){
-		return "Controls:\n"
-				+ "Click and Drag to move pieces\n"
-				+ " - Q/E while holding to rotate\n"
-				+ " - A/D while holding to flip horizontally\n"
-				+ " - W/S while holding to flip vertically\n"
-				+ "Release mouse to place piece";
 	}
 
 	@Override

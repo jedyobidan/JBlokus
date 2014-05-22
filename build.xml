@@ -16,7 +16,7 @@
 	<target name="server">
 	        <jar destfile="JBlokus/dist/JBlokus_v${version}/JBlokus_Server.jar" filesetmanifest="mergewithoutmain">
 	            <manifest>
-	                <attribute name="Main-Class" value="jedyobidan.blokus.ClientLaunch"/>
+	                <attribute name="Main-Class" value="jedyobidan.blokus.ServerLaunch"/>
 	                <attribute name="Class-Path" value="."/>
 	            </manifest>
 	            <fileset dir="JBlokus/bin"/>

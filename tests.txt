@@ -36,9 +36,13 @@ P1: Try an illegal move
 P1 legal move
 P2 legal move
   - AI plays next two moves
-  
 ======================================================
-03: Server Starts
+04: Local Game Second Start
+Prereq: Local Game played with 2 players and 2 AI
+------------------------------------------------------
+Repeat Tests 02-03
+======================================================
+05: Server Starts
 Prereq: None
 ------------------------------------------------------
 Launch Server
@@ -49,7 +53,7 @@ Launch Client
 Connect to Server
   - Server connected
 ======================================================
-04: Initial Connection Refused
+06: Initial Connection Refused
 Prereq: Server is not running, Client start screen
 ------------------------------------------------------
 Connect to Server
@@ -57,14 +61,14 @@ Connect to Server
 Click away
   - Error message closes
 ======================================================
-05: Connection dropped at setup
+07: Connection dropped at setup
 Prereq: Server is running, Client connected to online
   game
 ------------------------------------------------------
 Exit Server
   - Error displays on client
 ======================================================
-06: Online Play Setup Functions
+08: Online Play Setup Functions
 Prereq: Server is running
 ------------------------------------------------------
 Create 3 clients
@@ -87,4 +91,49 @@ ClientC exits
   - ClientA and ClientB unready
 ClientA, ClientB ready
   - game starts
-=====================================================
+======================================================
+09: Online Game Functions
+Prereq: Online game started with 2 clients, 2 AI
+------------------------------------------------------
+P1 Illegal Move
+  - Still P1 turn
+P1 Legal Move
+  - Move displayed on server and other client
+P2 Legal Move
+  - Move displayed on server and other client
+  - AI makes moves
+P1 Drop out
+  - Message appears on server and other client
+  - Server AI overrides P1
+  - P1 makes move
+Launch Client
+Attempt to join server
+  - Cannot connect message appears
+======================================================
+10: Online Game 2
+Prereq: Online game played
+------------------------------------------------------
+Repeat Tests 08-09
+======================================================
+11: LAN play
+Prereq: Game installed on two machines on same LAN
+------------------------------------------------------
+CPU1 Launch Server
+CPU2 Launch Client
+CPU2 Join CP1 Server
+  - Remote AI players appear
+CPU2 Join game
+  - Appears on Server and client
+======================================================
+12: WAN play
+Prereq: Game installed on two machines on diff LAN
+  CPU1 router port forwards
+  CPU1 firewall allows program run
+------------------------------------------------------
+CPU1 Launch Server
+CPU2 Launch Client
+CPU2 Join CP1 Server
+  - Remote AI players appear
+CPU2 Join game
+  - Appears on Server and client
+======================================================

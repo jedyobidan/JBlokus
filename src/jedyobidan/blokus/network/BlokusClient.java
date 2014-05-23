@@ -25,7 +25,7 @@ public class BlokusClient extends Client implements GameObserver {
 		((GameSetup)display.getStage("SETUP")).stopGame();
 		
 		display.setStage("TITLE");
-		((TitleScreen)display.getStage("TITLE")).viewMessage("You have been disconnected\nfrom the server.");
+		((TitleScreen)display.getStage("TITLE")).viewMessage(error + "\n\nYou have been disconnected\nfrom the server.");
 	}
 	
 	public void setPlayerNum(int p){

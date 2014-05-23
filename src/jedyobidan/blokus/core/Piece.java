@@ -71,6 +71,8 @@ public class Piece extends Actor{
 		return ans;
 	}
 	
+	
+	
 	public void move(int x, int y){
 		if(placed!= null){
 			throw new IllegalStateException("Piece has been placed and cannot be moved");

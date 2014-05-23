@@ -22,6 +22,7 @@ import jedyobidan.blokus.network.ReadyMessage;
 import jedyobidan.blokus.network.RemotePlayer;
 import jedyobidan.net.Message;
 import jedyobidan.net.MessageObserver;
+import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.Command;
 import jedyobidan.ui.nanim.Controller;
 import jedyobidan.ui.nanim.Display;
@@ -31,7 +32,6 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 	private JoinWidget join;
 	private Button drop, readyButton;
 	private BlokusClient client;
-	private int pnum = -1;
 	public OnlineGameSetup(Display d, BlokusClient c) {
 		super(d);
 		client = c;
@@ -49,10 +49,10 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 			@Override
 			public void execute() {
 				client.sendMessage(new DropRequest(client.getClientID()));
-				removeActor(drop);
-				addActor(join);
 			}
 		});
+		addActor(drop);
+		drop.setVisible(false);
 		client.sendMessage(new PlayerListRequest(client.getClientID()));
 		SwingUtilities.getWindowAncestor(d).addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent e){
@@ -66,9 +66,11 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 		readyButton = new Button(ClientLaunch.WIDTH-70, ClientLaunch.HEIGHT - 28, 60, 18, "Ready!", new Command(){
 			@Override
 			public void execute() {
-				client.sendMessage(new ReadyMessage(client.getClientID(), pnum, true));
+				client.sendMessage(new ReadyMessage(client.getClientID(), getPlayerNumber(), true));
 			}
 		});
+		addActor(readyButton);
+		readyButton.setVisible(false);
 	}
 
 	public void initializePlayers() {
@@ -89,14 +91,14 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 			if(old instanceof RemotePlayer){
 				client.removeObserver((MessageObserver) old);
 			} else if (old instanceof LocalPlayer){
-				pnum = -1;
-				removeActor(readyButton);
+				readyButton.setVisible(false);
+				drop.setVisible(false);
+				join.setVisible(true);
 			}
 			if(data.clientID == client.getClientID()){
 				players[data.playerNum] = new LocalPlayer(data.playerNum, data.name);
-				removeActor(join);
-				addActor(drop);
-				pnum = data.playerNum;
+				join.setVisible(false);
+				drop.setVisible(true);
 			} else {
 				RemotePlayer p = new RemotePlayer(data.playerNum, data.name);
 				client.addObserver(p);
@@ -105,12 +107,13 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 		} else if (m instanceof GameStart){
 			startGame();
 		} else if (m instanceof ReadyMessage){
-			ready[((ReadyMessage) m).pnum] = ((ReadyMessage) m).ready;
-			if(((ReadyMessage) m).pnum == pnum){
+			ReadyMessage rm = (ReadyMessage) m;
+			ready[rm.pnum] = rm.ready;
+			if(rm.pnum == getPlayerNumber()){
 				if(((ReadyMessage) m).ready){
-					removeActor(readyButton);
+					readyButton.setVisible(true);
 				} else if(!actors.contains(readyButton)){
-					addActor(readyButton);
+					readyButton.setVisible(false);
 				}
 			}
 		}
@@ -118,20 +121,24 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 	
 	public GameModel getGameModel(){
 		GameModel game = super.getGameModel();
-		client.setPlayerNum(pnum);
+		client.setPlayerNum(getPlayerNumber());
 		game.addObserver(client);
 		return game;
+	}
+	
+	private int getPlayerNumber(){
+		for(int i = 0; i < 4; i++){
+			if(players[i] instanceof LocalPlayer){
+				return i;
+			}
+		}
+		return -1;
 	}
 	
 	public GameStage getGameStage(GameModel game){
 		GameStage stage = super.getGameStage(game);
 		client.addObserver(stage);
 		return stage;
-	}
-	
-	public void startGame(){
-		client.setPlayerNum(pnum);
-		super.startGame();
 	}
 	
 	public void processInput(Controller c){

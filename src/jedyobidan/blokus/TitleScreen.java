@@ -72,6 +72,7 @@ public class TitleScreen extends Stage{
 		try{
 			Display d = getDisplay();
 			client = new BlokusClient(ip.getText(), Integer.parseInt(port.getText()), d);
+			while(client.getClientID() == 0){}
 			d.addStage("SETUP", new OnlineGameSetup(d, client));
 		} catch(Exception e){
 			if(!(e instanceof ConnectException))

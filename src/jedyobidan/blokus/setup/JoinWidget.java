@@ -43,4 +43,9 @@ public abstract class JoinWidget extends Actor implements Command{
 	public void clearName(){
 		joinName.clearText();
 	}
+	
+	public void setVisible(boolean visible){
+		joinName.setVisible(visible);
+		button.setVisible(visible);
+	}
 }

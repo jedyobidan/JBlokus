@@ -1,0 +1,90 @@
+======================================================
+00: Client Starts
+Prereq: None
+------------------------------------------------------
+Launch Client
+  - Client launches
+======================================================
+01: Help screen
+Prereq: None
+------------------------------------------------------
+Launch Client
+Click Help
+  - Help instructions shown
+Click away
+  - Help instructions close
+======================================================
+02: Local Play Setup Functions
+Prereq: Client start screen
+------------------------------------------------------
+Select "Local Play"
+  - Game Setup screen created
+Join Game x3
+  - 3 Players added
+AI Change
+  - Player 4 AI level changed
+Reset
+  - All Players removed
+Start
+  - Game starts
+======================================================
+03: Local Game Functions
+Prereq: Local Game started with 2 players and 2 AI
+------------------------------------------------------
+P1: Try an illegal move
+  - Game does not continue
+P1 legal move
+P2 legal move
+  - AI plays next two moves
+  
+======================================================
+03: Server Starts
+Prereq: None
+------------------------------------------------------
+Launch Server
+  - Server screen opens
+Click "Start Server" 
+  - Server starts
+Launch Client
+Connect to Server
+  - Server connected
+======================================================
+04: Initial Connection Refused
+Prereq: Server is not running, Client start screen
+------------------------------------------------------
+Connect to Server
+  - Error displays
+Click away
+  - Error message closes
+======================================================
+05: Connection dropped at setup
+Prereq: Server is running, Client connected to online
+  game
+------------------------------------------------------
+Exit Server
+  - Error displays on client
+======================================================
+06: Online Play Setup Functions
+Prereq: Server is running
+------------------------------------------------------
+Create 3 clients
+Join the server on ClientA and ClientB
+ClientA and ClientB join game
+  - both players should appear on both clients
+ClientA readies
+  - ready should display on both clients
+ClientC joins server
+  - ClientA should be joined and ready
+  - ClientB should be joined
+ClientC joins game
+  - ClientA unreadies
+ClientA and ClientB ready
+ClientC drops
+  - ClientA and ClientB unready
+ClientC joins game
+ClientA, ClientB ready
+ClientC exits
+  - ClientA and ClientB unready
+ClientA, ClientB ready
+  - game starts
+=====================================================

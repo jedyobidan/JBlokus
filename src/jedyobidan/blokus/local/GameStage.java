@@ -1,7 +1,6 @@
 package jedyobidan.blokus.local;
 
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import jedyobidan.blokus.ClientLaunch;
@@ -9,7 +8,6 @@ import jedyobidan.blokus.core.Dock;
 import jedyobidan.blokus.core.GameModel;
 import jedyobidan.blokus.core.GameObserver;
 import jedyobidan.blokus.core.Move;
-import jedyobidan.blokus.core.Piece;
 import jedyobidan.blokus.core.Player;
 import jedyobidan.blokus.network.PlayerDropped;
 import jedyobidan.blokus.setup.GameSetup;

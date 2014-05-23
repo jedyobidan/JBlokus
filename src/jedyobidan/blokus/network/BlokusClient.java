@@ -1,6 +1,5 @@
 package jedyobidan.blokus.network;
 
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -11,8 +10,6 @@ import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
 import jedyobidan.blokus.setup.GameSetup;
 import jedyobidan.net.Client;
-import jedyobidan.net.Message;
-import jedyobidan.net.ServerQuit;
 import jedyobidan.ui.nanim.Display;
 
 public class BlokusClient extends Client implements GameObserver {

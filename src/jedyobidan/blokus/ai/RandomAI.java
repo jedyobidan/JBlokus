@@ -1,6 +1,5 @@
 package jedyobidan.blokus.ai;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import jedyobidan.blokus.core.Move;

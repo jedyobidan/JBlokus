@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
-import java.awt.geom.Point2D;
-import java.util.HashSet;
 
-import jedyobidan.blokus.core.Piece;
 import jedyobidan.blokus.core.Player;
 import jedyobidan.ui.nanim.Actor;
 

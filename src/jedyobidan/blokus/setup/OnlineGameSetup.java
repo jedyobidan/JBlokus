@@ -22,7 +22,6 @@ import jedyobidan.blokus.network.ReadyMessage;
 import jedyobidan.blokus.network.RemotePlayer;
 import jedyobidan.net.Message;
 import jedyobidan.net.MessageObserver;
-import jedyobidan.ui.nanim.Actor;
 import jedyobidan.ui.nanim.Command;
 import jedyobidan.ui.nanim.Controller;
 import jedyobidan.ui.nanim.Display;

@@ -5,3 +5,4 @@
 /dist/*/_serverlogs
 /dist/*.zip
 /_serverlogs
+/bin

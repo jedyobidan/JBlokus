@@ -1,7 +1,5 @@
 package jedyobidan.blokus.ai;
 
-import java.util.ArrayList;
-
 import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
 

@@ -2,5 +2,6 @@
 /.settings/*
 /_serverlogs/*
 
-**/_serverlogs/*
+/dist/*/_serverlogs
 /dist/*.zip
+/_serverlogs

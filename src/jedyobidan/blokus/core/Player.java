@@ -17,7 +17,7 @@ public abstract class Player {
 		playerID = pid;
 		pieces = new ArrayList<Piece>();
 		for(PieceData p: PieceData.getAllPieces()){
-			pieces.add(new Piece(p, getColor()));
+			pieces.add(new Piece(p, playerID));
 		}
 		dock = new Dock(pieces, this);
 		alive = true;
@@ -87,8 +87,9 @@ public abstract class Player {
 				for(int y = 0; y < 20; y++){
 					Point place = new Point(x,y);
 					Piece p = pc.getCopy();
+					p.place(x, y);
 					for(int i = 0; i < p.data.rotations; i++){
-						if(game.getBoard().canPlace(p, place)){
+						if(game.getBoard().canPlace(p)){
 							ans.add(new Move(p, place, this));
 						}
 						p.rotateCW();
@@ -97,7 +98,7 @@ public abstract class Player {
 					if(p.data.flip){
 						p.flipHorizontal();
 						for(int i = 0; i < p.data.rotations; i++){
-							if(game.getBoard().canPlace(p, place)){
+							if(game.getBoard().canPlace(p)){
 								ans.add(new Move(p, place, this));
 							}
 							p.rotateCW();

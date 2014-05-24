@@ -20,9 +20,12 @@ public class Move implements Serializable{
 		this.playerID = player.playerID;
 		this.playerName = player.getName();
 	}
-
-	public void execute(GameModel game){
+	
+	private Piece getPiece(GameModel game, boolean copy){
 		Piece piece = game.getPiece(playerID, pieceType);
+		if(copy){
+			piece = piece.getCopy();
+		}
 		piece.resetRotation();
 		for(String s: transformations){
 			if(s.equals("CW")){
@@ -35,16 +38,19 @@ public class Move implements Serializable{
 				piece.flipVertical();
 			}
 		}
-		if(legal(game)){
-			game.getBoard().place(piece, placement);
-		} else {
-			throw new IllegalArgumentException("Illegal Move");
-		}
+		piece.place(placement.x, placement.y);
+		return piece;
+	}
+
+	public void execute(GameModel game){
+		Piece piece = getPiece(game, false);
+		game.getBoard().addPiece(piece);
 		piece.zIndex = 0;
 	}
 	
 	public boolean legal(GameModel game){
-		return game.getBoard().canPlace(game.getPiece(playerID, pieceType), placement);
+		Piece piece = getPiece(game, true);
+		return game.getBoard().canPlace(piece);
 	}
 	
 	public String toString(){

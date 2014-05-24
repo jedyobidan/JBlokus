@@ -18,23 +18,24 @@ public class Piece extends Actor{
 	private AffineTransform rotation;
 	private ArrayList<String> transformations;
 	private Point placed;
-	private final Color color;
+	private final int pid;
 	private int x;
 	private int y;
 	
-	public Piece(PieceData data, Color c){
+	public Piece(PieceData data, int pid){
 		this.data = data;
 		rotation = new AffineTransform();
 		transformations = new ArrayList<String>();
-		this.color = c;
+		this.pid = pid;
 	}
 	
 	public Piece getCopy(){
-		return new Piece(data, color);
+		return new Piece(data, pid);
 	}
 	
 	@Override
 	public void render(Graphics2D g) {
+		Color color = Player.getColor(pid);
 		for(Point2D p: getRotationPoints()){
 			int renderX, renderY;
 			renderX = (int)(x + p.getX() * 16-8);
@@ -156,6 +157,10 @@ public class Piece extends Actor{
 		return ans;
 	}
 	
+	public int getPlayerID(){
+		return pid;
+	}
+	
 	public String toString(){
 		return data.type;
 	}
@@ -168,10 +173,6 @@ public class Piece extends Actor{
 	@Override
 	public Shape getHitbox() {
 		return null;
-	}
-	
-	public Color getColor(){
-		return color;
 	}
 
 	public ArrayList<String> getTransformations() {

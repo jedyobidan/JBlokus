@@ -97,6 +97,8 @@ Prereq: Online game started with 2 clients, 2 AI
 ------------------------------------------------------
 P1 Illegal Move
   - Still P1 turn
+P2 Tries to move for P1
+  - Cannot click
 P1 Legal Move
   - Move displayed on server and other client
 P2 Legal Move

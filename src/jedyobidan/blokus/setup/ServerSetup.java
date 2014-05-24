@@ -59,8 +59,11 @@ public class ServerSetup extends JFrame implements GameObserver{
 		for(int i= 0; i < 4; i++){
 			this.players[i] = new PlayerComponent();
 			this.players[i].setPlayer(s.getPlayerData()[i]);
-			playerC.add(this.players[i]);
 		}
+		playerC.add(players[0]);
+		playerC.add(players[1]);
+		playerC.add(players[3]);
+		playerC.add(players[2]);
 		add(playerC);
 		
 		

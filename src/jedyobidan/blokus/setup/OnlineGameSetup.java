@@ -110,9 +110,9 @@ public class OnlineGameSetup extends GameSetup implements MessageObserver{
 			ready[rm.pnum] = rm.ready;
 			if(rm.pnum == getPlayerNumber()){
 				if(((ReadyMessage) m).ready){
-					readyButton.setVisible(true);
-				} else if(!actors.contains(readyButton)){
 					readyButton.setVisible(false);
+				} else {
+					readyButton.setVisible(true);
 				}
 			}
 		}

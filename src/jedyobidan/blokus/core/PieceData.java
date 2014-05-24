@@ -45,7 +45,6 @@ public class PieceData {
 			int rotations = Integer.valueOf(args[args.length-2]);
 			boolean flip = Boolean.valueOf(args[args.length-1]);
 			PieceData data = new PieceData(type, points,rotations, flip);
-			System.out.println(data);
 			ans.add(data);
 		}
 		return ans;

@@ -39,7 +39,6 @@ public class BoardModel {
 		for(Point2D point: p.getPlacedCorners()){
 			addCorner(pid, point);
 		}
-		System.out.println(this);
 	}
 	
 	private void addUnusable(int pid, Point2D point){

@@ -9,7 +9,7 @@ import jedyobidan.blokus.core.Piece;
 public class Knight extends AbstractAI{
 	private double defensiveness;
 	public Knight(int pid) {
-		super(pid, "Knight_"+pid, 0.7f);
+		super(pid, "Knight_"+pid, 0.65f);
 		Random r = new Random();
 		defensiveness = r.nextGaussian()/4;
 		System.out.println(getName()+ " defense: " + String.format("%.2f", defensiveness));
@@ -39,8 +39,10 @@ public class Knight extends AbstractAI{
 		int size = p.getPlacedPoints().size();
 		int corner = p.getPlacedCorners().size();
 		double cornerEff = dc/(corner-1.0);
+		int movCount = 21-pieces.size();
+		double ccdist = centerCornerDist(p);
 		return 180 + size*130 + dc*50*(1-defensiveness) + cornerEff*20 + 
-				dec*35*(1+defensiveness);
+				dec*35*(1+defensiveness) + 300/ccdist*Math.pow(0.8, movCount);
 	}
 
 }

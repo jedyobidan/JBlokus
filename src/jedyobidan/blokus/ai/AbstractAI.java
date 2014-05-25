@@ -104,5 +104,17 @@ public abstract class AbstractAI extends AIPlayer{
 		}
 		return ct;
 	}
+	
+	protected double centerCornerDist(Piece p){
+		double dist = 20;
+		HashSet<Point2D> corners = game.getBoard().corners[playerID];
+		HashSet<Point2D> unusable = game.getBoard().unusable[playerID];
+		for(Point2D point: p.getPlacedCorners()){
+			if(!BoardModel.inBounds(point)) continue;
+			if(corners.contains(point) || unusable.contains(point)) continue;
+			dist= Math.min(dist,Math.abs(9.5 - point.getX()) + Math.abs(9.5 - point.getY()));
+		}
+		return dist;
+	}
 
 }

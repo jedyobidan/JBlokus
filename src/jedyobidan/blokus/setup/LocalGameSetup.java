@@ -1,6 +1,8 @@
 package jedyobidan.blokus.setup;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Random;
 
 import jedyobidan.blokus.ClientLaunch;
 import jedyobidan.blokus.ai.AIPlayer;
@@ -90,6 +92,20 @@ public class LocalGameSetup extends GameSetup{
 	public String getAILevel(){
 		if(aiLevel!= null) return aiLevel.getOption();
 		else return AIPlayer.AI_LEVELS[0];
+	}
+	
+	private int getAvailable(){
+		ArrayList<Integer> av = new ArrayList<>();
+		for(int i = 0; i < 4; i++){
+			if(players[i] instanceof AIPlayer){
+				av.add(i);
+			}
+		}
+		if(av.size() > 0){
+			return av.get(new Random().nextInt(av.size()));
+		} else {
+			return -1;
+		}
 	}
 	
 }

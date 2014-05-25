@@ -93,15 +93,6 @@ public abstract class GameSetup extends Stage implements GameObserver{
 	
 	public abstract void reinitPlayers();
 	
-	protected int getAvailable(){
-		for(int i = 0; i < 4; i++){
-			if(players[i] instanceof AIPlayer){
-				return i;
-			}
-		}
-		return -1;
-	}
-	
 	public void gameStart(){
 		
 	}

@@ -3,6 +3,8 @@ package jedyobidan.blokus.network;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 import jedyobidan.blokus.ai.AIPlayer;
 import jedyobidan.blokus.core.GameModel;
@@ -147,13 +149,19 @@ public class BlokusServer extends Server implements GameObserver{
 		broadcastMessage(new GameStart());
 	}
 	
-	protected int getAvailable(){
+	private int getAvailable(){
+		ArrayList<Integer> av = new ArrayList<>();
 		for(int i = 0; i < 4; i++){
 			if(players[i] instanceof AIPlayer){
-				return i;
+				av.add(i);
 			}
 		}
-		return -1;
+		if(av.size() > 0){
+			return av.get(new Random().nextInt(av.size()));
+		} else {
+			return -1;
+		}
+		
 	}
 	
 	public PlayerData[] getPlayerData(){
@@ -196,6 +204,7 @@ public class BlokusServer extends Server implements GameObserver{
 				players[i] = player;
 			} else {
 				players[i] = AIPlayer.createAI(aiLevel, i);
+				playerData[i] = new PlayerData(players[i].getName(), i, 0);
 			}
 		}
 		for(PlayerData p: playerData){

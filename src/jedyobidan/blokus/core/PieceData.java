@@ -15,9 +15,9 @@ import jedyobidan.io.IO;
 public class PieceData {
 	private static final Map<String, PieceData> allData = new LinkedHashMap<>();
 	public final Set<Point> basePoints;
-	public final Set<Point> corners;
 	public final Set<Point> edges;
 	public final Set<Point> unusable;
+	public final Set<Point> corners;
 	public final String type;
 	public final int rotations;
 	public final boolean flip;

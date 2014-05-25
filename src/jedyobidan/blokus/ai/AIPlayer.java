@@ -4,7 +4,7 @@ import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
 
 public abstract class AIPlayer extends Player implements Runnable{
-	public static final String[] AI_LEVELS = {"Random", "Easy"};
+	public static final String[] AI_LEVELS = {"Monkey", "Padawan","Apprentice", "Knight"};
 	public AIPlayer(int pid, String name) {
 		super(pid, name);
 	}
@@ -29,10 +29,12 @@ public abstract class AIPlayer extends Player implements Runnable{
 	
 	public static AIPlayer createAI(String type, int pid){
 		switch(type){
-		case "Random": return new RandomAI(pid);
-		case "Easy": return new EasyAI(pid);
+		case "Monkey": return new Monkey(pid);
+		case "Padawan": return new Padawan(pid);
+		case "Apprentice": return new Apprentice(pid);
+		case "Knight": return new Knight(pid);
 		}
-		return null;
+		throw new IllegalArgumentException("Not an AI type");
 	}
 	
 }

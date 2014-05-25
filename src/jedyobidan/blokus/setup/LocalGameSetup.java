@@ -83,7 +83,7 @@ public class LocalGameSetup extends GameSetup{
 	
 	public String getAILevel(){
 		if(aiLevel!= null) return aiLevel.getOption();
-		else return "Random";
+		else return AIPlayer.AI_LEVELS[0];
 	}
 	
 }

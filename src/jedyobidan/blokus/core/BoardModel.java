@@ -3,6 +3,7 @@ package jedyobidan.blokus.core;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class BoardModel {
 	public final HashSet<Point2D>[] corners;
@@ -42,11 +43,13 @@ public class BoardModel {
 	}
 	
 	private void addUnusable(int pid, Point2D point){
+		if(!inBounds(point)) return;
 		unusable[pid].add(point);
 		corners[pid].remove(point);
 	}
 	
 	private void addCorner(int pid, Point2D point){
+		if(!inBounds(point)) return;
 		if(!unusable[pid].contains(point)){
 			corners[pid].add(point);
 		}
@@ -73,14 +76,14 @@ public class BoardModel {
 		return null;
 	}
 	
-	private boolean inBounds(Point2D p){
+	public static boolean inBounds(Point2D p){
 		return p.getX() >=0 && p.getX() < 20 && p.getY() >= 0 && p.getY() < 20;
 	}
 	
 	public String toString(){
 		String ans = "";
-		for(int y = 0; y <20; y++){
-			for(int x = 0; x < 20; x++){
+		for(int y = -1; y <21; y++){
+			for(int x = -1; x < 21; x++){
 				char c = ' ';
 				Point p = new Point(x,y);
 				for(int i = 0; i < 4; i++){

@@ -6,6 +6,7 @@ import jedyobidan.blokus.ai.AIPlayer;
 import jedyobidan.blokus.core.GameModel;
 import jedyobidan.blokus.core.Player;
 import jedyobidan.blokus.local.GameStage;
+import jedyobidan.blokus.local.LocalPlayer;
 import jedyobidan.ui.nanim.Display;
 import jedyobidan.ui.nanim.ThreadFPSRunner;
 
@@ -28,10 +29,10 @@ public class AITest extends JFrame{
 		AITest test = new AITest();
 		
 		GameModel game = new GameModel();
-		game.addPlayer(AIPlayer.createAI("Easy", 0));
-		game.addPlayer(AIPlayer.createAI("Random", 1));
-		game.addPlayer(AIPlayer.createAI("Random", 2));
-		game.addPlayer(AIPlayer.createAI("Random", 3));
+		game.addPlayer(AIPlayer.createAI("Knight", 0));
+		game.addPlayer(AIPlayer.createAI("Apprentice", 1));
+		game.addPlayer(AIPlayer.createAI("Knight", 2));
+		game.addPlayer(AIPlayer.createAI("Apprentice", 3));
 		
 		GameStage stage = new GameStage(display);
 		for(Player p: game.getPlayers()){

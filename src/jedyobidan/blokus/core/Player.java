@@ -8,7 +8,7 @@ public abstract class Player {
 	public final int playerID;
 	private String name;
 	protected ArrayList<Piece> pieces;
-	private GameModel game;
+	protected GameModel game;
 	private Dock dock;
 	private boolean alive;
 	protected ArrayList<Move> possibleMoves;

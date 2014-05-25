@@ -3,9 +3,9 @@ package jedyobidan.blokus.ai;
 import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.PieceData;
 
-public class EasyAI extends AbstractAI {
-	public EasyAI(int pid) {
-		super(pid, "EasyAI_" + pid);
+public class Padawan extends AbstractAI {
+	public Padawan(int pid) {
+		super(pid, "Padawan_" + pid);
 	}
 
 	@Override

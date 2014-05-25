@@ -61,9 +61,14 @@ public class Piece extends Actor{
 		return ans;
 	}
 	
-	public Set<Point2D> transform(Set<? extends Point2D> points){
+	public AffineTransform getTransform(){
 		AffineTransform transform = AffineTransform.getTranslateInstance(placed.x, placed.y);
 		transform.concatenate(rotation);
+		return transform;
+	}
+	
+	public Set<Point2D> transform(Set<? extends Point2D> points){
+		AffineTransform transform = getTransform();
 		
 		HashSet<Point2D> ans = new HashSet<Point2D>();
 		for(Point2D p: points){
@@ -80,13 +85,14 @@ public class Piece extends Actor{
 		return transform(data.edges);
 	}
 	
+	public Set<Point2D> getPlacedUnusable(){
+		return transform(data.unusable);
+	}
+	
 	public Set<Point2D> getPlacedCorners(){
 		return transform(data.corners);
 	}
 	
-	public Set<Point2D> getPlacedUnusable(){
-		return transform(data.unusable);
-	}
 	
 	public void move(int x, int y){
 		if(placed!= null){

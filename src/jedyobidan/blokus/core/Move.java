@@ -3,6 +3,7 @@ package jedyobidan.blokus.core;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Move implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -14,13 +15,22 @@ public class Move implements Serializable{
 	
 	
 	public Move(Piece piece, Point placement, Player player) {
-		this.pieceType = piece.data.type;
-		this.transformations = new ArrayList<String>(piece.getTransformations());
-		this.placement = placement;
+		this(piece.data.type, piece.getTransformations(), placement, player);
+	}
+	
+	public Move(String pieceType, List<String> transformations, Point place, Player player){
+		this.pieceType = pieceType;
+		this.transformations = new ArrayList<String>(transformations);
+		this.placement = place;
 		this.playerID = player.playerID;
 		this.playerName = player.getName();
 	}
-	
+
+
+
+	public Piece getPiece(GameModel game){
+		return getPiece(game, true);
+	}
 	private Piece getPiece(GameModel game, boolean copy){
 		Piece piece = game.getPiece(playerID, pieceType);
 		if(copy){

@@ -22,6 +22,7 @@ public abstract class AbstractAI extends AIPlayer{
 		entropy = 1f;
 		if(Math.random() < useOpening){
 			opening = selectOpening();
+			System.out.println(name + " using " + opening.name);
 		}
 	}
 	

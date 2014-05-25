@@ -14,6 +14,7 @@ public class LocalGameSetup extends GameSetup{
 	private AISelector aiLevel;
 	private JoinWidget join;
 	private Button reset, start;
+	private String currAILevel;
 	public LocalGameSetup(Display d) {
 		super(d);
 		aiLevel = new AISelector();
@@ -45,13 +46,18 @@ public class LocalGameSetup extends GameSetup{
 			}			
 		});
 		addActor(reset);
+		
+		currAILevel = getAILevel();
 	}
 	
 	public void beforeStep(){
-		for(int i = 0; i < 4; i++){
-			if(players[i] instanceof AIPlayer){
-				players[i] = AIPlayer.createAI(getAILevel(), i);
+		if(!currAILevel.equals(getAILevel())){
+			for(int i = 0; i < 4; i++){
+				if(players[i] instanceof AIPlayer){
+					players[i] = AIPlayer.createAI(getAILevel(), i);
+				}
 			}
+			currAILevel = getAILevel();
 		}
 		super.beforeStep();
 	}

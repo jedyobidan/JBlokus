@@ -27,6 +27,8 @@ public abstract class Player {
 		return name;
 	}
 	
+	public abstract String type();
+	
 	public Color getColor(){
 		return getColor(playerID);
 	}

@@ -66,5 +66,9 @@ public class RemotePlayer extends Player implements MessageObserver{
 		}
 		tryMove();
 	}
+	
+	public String type(){
+		return "Remote Player";
+	}
 
 }

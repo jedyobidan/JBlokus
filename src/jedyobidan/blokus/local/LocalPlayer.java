@@ -14,4 +14,8 @@ public class LocalPlayer extends Player {
 		
 	}
 	
+	public String type(){
+		return "Local Player";
+	}
+	
 }

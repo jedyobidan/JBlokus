@@ -45,7 +45,7 @@ public class PlayerInfo extends Actor{
 		g.setFont(FONT);
 		g.drawString(player.getName(), 10, y+21);
 		g.setFont(Font.decode(null));
-		String code = player.getClass().getSimpleName();
+		String code = player.type();
 		g.drawString(code, ClientLaunch.WIDTH-12-g.getFontMetrics().stringWidth(code), y+2+g.getFontMetrics().getAscent());
 		if(ready){
 			g.setFont(Font.decode(null).deriveFont(Font.ITALIC));

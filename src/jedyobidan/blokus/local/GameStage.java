@@ -87,9 +87,7 @@ public class GameStage extends Stage implements GameObserver, MessageObserver{
 
 	@Override
 	public void gameStart() {
-		addActor(new TextFlyBanner(100, 1, 
-				Font.decode(null).deriveFont(24f).deriveFont(Font.BOLD), 
-				"Game Start"){
+		addActor(new TextFlyBanner(1, "Game Start"){
 					@Override
 					public void finish() {
 						

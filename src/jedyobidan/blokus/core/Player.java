@@ -81,6 +81,8 @@ public abstract class Player {
 		return dock;
 	}
 	
+
+	
 	public ArrayList<Move> generatePossibleMoves(){
 		ArrayList<Move> ans = new ArrayList<>();
 		for(Piece pc: pieces){

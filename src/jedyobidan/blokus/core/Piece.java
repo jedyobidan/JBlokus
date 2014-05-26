@@ -35,7 +35,10 @@ public class Piece extends Actor{
 	
 	@Override
 	public void render(Graphics2D g) {
-		Color color = Player.getColor(pid);
+		render(g, Player.getColor(pid));
+	}
+	
+	public void render(Graphics2D g, Color color){
 		for(Point2D p: getRotationPoints()){
 			int renderX, renderY;
 			renderX = (int)(x + p.getX() * 16-8);
@@ -46,7 +49,6 @@ public class Piece extends Actor{
 			g.setColor(fill);
 			g.fillRect(renderX, renderY, 15, 15);
 		}
-		
 	}
 	
 	

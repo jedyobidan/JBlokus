@@ -28,13 +28,15 @@ public class Move implements Serializable{
 
 
 
-	public Piece getPiece(GameModel game){
-		return getPiece(game, true);
+	public Piece getPiece(){
+		return getPiece(null);
 	}
-	private Piece getPiece(GameModel game, boolean copy){
-		Piece piece = game.getPiece(playerID, pieceType);
-		if(copy){
-			piece = piece.getCopy();
+	private Piece getPiece(GameModel game){
+		Piece piece;
+		if(game!=null){
+			piece = game.getPiece(playerID, pieceType);
+		} else {
+			piece = new Piece(PieceData.getData(pieceType),playerID);
 		}
 		piece.resetRotation();
 		for(String s: transformations){
@@ -53,13 +55,13 @@ public class Move implements Serializable{
 	}
 
 	public void execute(GameModel game){
-		Piece piece = getPiece(game, false);
+		Piece piece = getPiece(game);
 		game.getBoard().addPiece(piece);
 		piece.zIndex = 0;
 	}
 	
 	public boolean legal(GameModel game){
-		Piece piece = getPiece(game, true);
+		Piece piece = getPiece(null);
 		return game.getBoard().canPlace(piece);
 	}
 	

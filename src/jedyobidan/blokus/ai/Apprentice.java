@@ -10,13 +10,13 @@ public class Apprentice extends AbstractAI{
 
 	public Move selectMove(){
 		Move m = super.selectMove();
-		System.out.println(centerCornerDist(m.getPiece(game)));
+		System.out.println(centerCornerDist(m.getPiece()));
 		return m;
 	}
 	
 	@Override
 	public double score(Move m) {
-		Piece p = m.getPiece(game);
+		Piece p = m.getPiece();
 		int dc = deltaCorners(p);
 		int size = p.getPlacedPoints().size();
 		int corner = p.getPlacedCorners().size();

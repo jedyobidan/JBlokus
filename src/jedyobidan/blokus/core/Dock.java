@@ -26,6 +26,8 @@ public class Dock extends Actor{
 	private double x;
 	private int dx;
 	
+	private double timePassed;
+	
 	public static final int X = Board.X + Board.SIZE + 5, WIDTH = 250;
 	
 	public Dock(Collection<Piece> pieces, Player player){
@@ -97,6 +99,10 @@ public class Dock extends Actor{
 	
 	@Override
 	public void onStep() {
+		timePassed += getStage().getDeltaSeconds();
+		if(selectedPiece != null){
+			timePassed = 0;
+		}
 		x+= dx * getStage().getDeltaSeconds();
 		if(x < X){
 			x = X;
@@ -133,6 +139,11 @@ public class Dock extends Actor{
 		g.setStroke(new BasicStroke(2));
 		g.drawLine((int)x, 0, (int)x, ClientLaunch.HEIGHT);
 		g.setStroke(s);
+		
+		if(player instanceof LocalPlayer && timePassed > 5 && timePassed%1 < 0.5){
+			Piece p = ((LocalPlayer)player).getHint().getPiece();
+			p.render(g, new Color(210,210,210));
+		}
 	}
 	
 

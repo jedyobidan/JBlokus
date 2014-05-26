@@ -4,14 +4,17 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 
+/**
+ * Represents a single Player
+ * Responsible for making moves.
+ */
 public abstract class Player {
 	public final int playerID;
 	private String name;
+	private Dock dock;
+	protected ArrayList<Move> possibleMoves;
 	protected ArrayList<Piece> pieces;
 	protected GameModel game;
-	private Dock dock;
-	private boolean alive;
-	protected ArrayList<Move> possibleMoves;
 	public Player(int pid, String name){
 		this.name = name;
 		playerID = pid;
@@ -20,7 +23,6 @@ public abstract class Player {
 			pieces.add(new Piece(p, playerID));
 		}
 		dock = new Dock(pieces, this);
-		alive = true;
 	}
 	
 	public String getName(){
@@ -86,7 +88,7 @@ public abstract class Player {
 	public ArrayList<Move> generatePossibleMoves(){
 		ArrayList<Move> ans = new ArrayList<>();
 		for(Piece pc: pieces){
-			if(pc.isPlaced()) continue;
+			if(pc.isFinalized()) continue;
 			for(int x = 0; x < 20; x++){
 				for(int y = 0; y < 20; y++){
 					Point place = new Point(x,y);
@@ -116,24 +118,16 @@ public abstract class Player {
 		return ans;
 	}
 	
-	public void setAlive(boolean alive){
-		this.alive = alive;
-	}
-	
-	public boolean isAlive(){
-		return alive;
-	}
-	
 	public int score(){
 		int score = 0;
 		for(Piece p: pieces){
-			if(!p.isPlaced()) score += p.data.basePoints.size();
+			if(p.isFinalized()) score += p.data.basePoints.size();
 		}
 		return score;
 	}
 	
-	public boolean legal(Move m){
-		return m.legal(game);
+	public GameModel getGame(){
+		return game;
 	}
 	
 	public void makeMove(Move m){

@@ -4,14 +4,25 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
+/**
+ * Represents the board = some state of the game
+ * Is responsible for various game metrics and legality.
+ * @author Young
+ *
+ */
 public class BoardModel {
+	public final HashSet<Piece> pieces;
 	public final HashSet<Point2D>[] corners;
 	public final HashSet<Point2D>[] unusable;
 	public final HashSet<Point2D>[] placedPoints;
+	public final HashSet<HashSet<Point>> zones;
 	
 	@SuppressWarnings("unchecked")
 	public BoardModel(){
+		pieces = new HashSet<>();
 		corners = (HashSet<Point2D>[]) new HashSet[4];
 		unusable = (HashSet<Point2D>[]) new HashSet[4];
 		placedPoints = (HashSet<Point2D>[]) new HashSet[4];
@@ -21,12 +32,23 @@ public class BoardModel {
 			unusable[i] = new HashSet<Point2D>();
 			placedPoints[i] = new HashSet<Point2D>();
 		}
+		zones = new HashSet<>();
+	}
+	
+	public BoardModel(BoardModel model){
+		this();
+		for(int i = 0; i < 4; i++){
+			this.corners[i].addAll(model.corners[i]);
+			this.placedPoints[i].addAll(model.placedPoints[i]);
+			this.unusable[i].addAll(model.unusable[i]);
+		}
 	}
 	
 	public void addPiece(Piece p){
 		if(!canPlace(p)){
 			throw new IllegalArgumentException("Illegal Move");
 		}
+		pieces.add(p);
 		int pid = p.getPlayerID();
 		for(Point2D point: p.getPlacedPoints()){
 			for(int i = 0; i < 4; i++){
@@ -54,7 +76,6 @@ public class BoardModel {
 			corners[pid].add(point);
 		}
 	}
-	
 	
 	public boolean canPlace(Piece p){
 		boolean cornerTouch = false;	

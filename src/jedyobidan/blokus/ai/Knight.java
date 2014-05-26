@@ -33,7 +33,7 @@ public class Knight extends AbstractAI{
 
 	@Override
 	public double score(Move m) {
-		Piece p = m.getPiece();
+		Piece p = m.getNewPiece();
 		int dc = deltaCorners(p);
 		int dec = blockedCorners(p);
 		int size = p.getPlacedPoints().size();

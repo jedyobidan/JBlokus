@@ -5,6 +5,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents all the actions taken on a Piece to place it on the BoardModel.
+ * Is responsible for manipulate Pieces.
+ * @author Young
+ *
+ */
 public class Move implements Serializable{
 	private static final long serialVersionUID = 1L;
 	public final String pieceType;
@@ -25,44 +31,33 @@ public class Move implements Serializable{
 		this.playerID = player.playerID;
 		this.playerName = player.getName();
 	}
-
-
-
-	public Piece getPiece(){
-		return getPiece(null);
-	}
-	private Piece getPiece(GameModel game){
-		Piece piece;
-		if(game!=null){
-			piece = game.getPiece(playerID, pieceType);
-		} else {
-			piece = new Piece(PieceData.getData(pieceType),playerID);
-		}
-		piece.resetRotation();
+	
+	public void applyTransformation(Piece p){
+		p.resetRotation();
 		for(String s: transformations){
 			if(s.equals("CW")){
-				piece.rotateCW();
+				p.rotateCW();
 			} else if (s.equals("CCW")){
-				piece.rotateCCW();
+				p.rotateCCW();
 			} else if (s.equals("HF")){
-				piece.flipHorizontal();
+				p.flipHorizontal();
 			} else if (s.equals("VF")){
-				piece.flipVertical();
+				p.flipVertical();
 			}
 		}
-		piece.place(placement.x, placement.y);
-		return piece;
-	}
-
-	public void execute(GameModel game){
-		Piece piece = getPiece(game);
-		game.getBoard().addPiece(piece);
-		piece.zIndex = 0;
+		p.place(placement.x, placement.y);
 	}
 	
-	public boolean legal(GameModel game){
-		Piece piece = getPiece(null);
-		return game.getBoard().canPlace(piece);
+	public boolean legal(BoardModel board){
+		Piece piece = new Piece(PieceData.getData(pieceType), playerID);
+		applyTransformation(piece);
+		return board.canPlace(piece);
+	}
+	
+	public Piece getNewPiece(){
+		Piece p = new Piece(PieceData.getData(pieceType), playerID);
+		applyTransformation(p);
+		return p;
 	}
 	
 	public String toString(){

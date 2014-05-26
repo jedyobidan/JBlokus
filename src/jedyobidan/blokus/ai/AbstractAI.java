@@ -34,7 +34,7 @@ public abstract class AbstractAI extends AIPlayer{
 	public Move selectMove() {
 		if(opening!=null && opening.inOpening()){
 			Move m = opening.getMove(this);
-			if(m.legal(game)){
+			if(m.legal(game.getBoard())){
 				return m;
 			} else {
 				opening.abandon();

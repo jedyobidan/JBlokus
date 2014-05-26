@@ -12,6 +12,12 @@ import java.util.Set;
 
 import jedyobidan.io.IO;
 
+/**
+ * Represents a specific type of Piece.
+ * Is responsible for that Piece's points, corners, edges, and other natural features.
+ * @author Young
+ *
+ */
 public class PieceData {
 	private static final Map<String, PieceData> allData = new LinkedHashMap<>();
 	public final Set<Point> basePoints;

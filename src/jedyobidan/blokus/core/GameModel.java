@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Represents one instance of the game.
+ * Responsible for game logic and player state.
+ * @author Young
+ *
+ */
 public class GameModel {
-	private BoardModel model;
+	private BoardModel board;
 	private ArrayList<Player> players;
 	private ArrayList<Player> alive;
 	private HashSet<GameObserver> observers;
@@ -15,7 +21,7 @@ public class GameModel {
 	private boolean stopped;
 	
 	public GameModel(){
-		model = new BoardModel();
+		board = new BoardModel();
 		observers = new HashSet<>();
 		players = new ArrayList<>();
 		alive = new ArrayList<>();
@@ -25,7 +31,11 @@ public class GameModel {
 	public void makeMove(Move m){
 		players.get(turnCt%4).endTurn();
 		System.out.println(m);
-		m.execute(GameModel.this);
+		Piece p = this.getPlayer(m.playerID).getPiece(m.pieceType);
+		m.applyTransformation(p);
+		board.addPiece(p);
+		p.finalize();
+				
 		moveLog.add(m);
 		for(GameObserver o: observers){
 			o.moveMade(m);
@@ -51,7 +61,6 @@ public class GameModel {
 					o.noMoves(players.get(turnCt%4));
 				}
 				alive.remove(p);
-				p.setAlive(false);
 				turnCt++;
 				tryStartTurn();
 			}
@@ -74,14 +83,13 @@ public class GameModel {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		players.get(0).generatePossibleMoves();
-		startTurn(players.get(0));
+		tryStartTurn();
 	}
 	
 	public void endGame(){
-		int bestScore = 400;
+		int bestScore = 0;
 		for(Player p: players){
-			if(p.score() <= bestScore){
+			if(p.score() >= bestScore){
 				winner = p;
 				bestScore = p.score();
 			}
@@ -108,12 +116,8 @@ public class GameModel {
 		return players.get(pid);
 	}
 	
-	public Piece getPiece(int pid, String type){
-		return getPlayer(pid).getPiece(type);
-	}
-	
 	public BoardModel getBoard(){
-		return model;
+		return board;
 	}
 	
 	public Iterable<Player> getPlayers(){

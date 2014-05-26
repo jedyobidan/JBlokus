@@ -13,20 +13,28 @@ import java.util.Set;
 import jedyobidan.blokus.local.Board;
 import jedyobidan.ui.nanim.Actor;
 
+/**
+ * Represents a single Piece.
+ * Is responsible for its orientation, position, and rendering.
+ * @author Young
+ *
+ */
 public class Piece extends Actor{
 	public final PieceData data;
 	private AffineTransform rotation;
 	private ArrayList<String> transformations;
 	private Point placed;
 	private final int pid;
-	private int x;
-	private int y;
+	private int offsetX;
+	private int offsetY;
+	private boolean finalized;
 	
 	public Piece(PieceData data, int pid){
 		this.data = data;
 		rotation = new AffineTransform();
 		transformations = new ArrayList<String>();
 		this.pid = pid;
+		placed = new Point(0,0);
 	}
 	
 	public Piece getCopy(){
@@ -39,28 +47,16 @@ public class Piece extends Actor{
 	}
 	
 	public void render(Graphics2D g, Color color){
-		for(Point2D p: getRotationPoints()){
+		for(Point2D p: getPlacedPoints()){
 			int renderX, renderY;
-			renderX = (int)(x + p.getX() * 16-8);
-			renderY = (int)(y + p.getY() *16-8);
+			renderX = (int)(offsetX + p.getX() * 16-8);
+			renderY = (int)(offsetY + p.getY() *16-8);
 			g.setColor(color.darker());
 			g.drawRect(renderX-1, renderY-1, 16, 16);
 			Color fill = new Color(color.getRed(), color.getGreen(), color.getBlue(), 191);
 			g.setColor(fill);
 			g.fillRect(renderX, renderY, 15, 15);
 		}
-	}
-	
-	
-	public Set<Point2D> getRotationPoints(){
-		AffineTransform transform = new AffineTransform();
-		transform.concatenate(rotation);
-		
-		HashSet<Point2D> ans = new HashSet<Point2D>();
-		for(Point2D p: data.basePoints){
-			ans.add(transform.transform(p, null));
-		}
-		return ans;
 	}
 	
 	public AffineTransform getTransform(){
@@ -96,17 +92,20 @@ public class Piece extends Actor{
 	}
 	
 	
-	public void move(int x, int y){
-		if(placed!= null){
-			throw new IllegalStateException("Piece has been placed and cannot be moved");
+	public void offset(int x, int y){
+		if(finalized){
+			throw new IllegalStateException("Piece has been finalized");
 		}
-		this.x = x;
-		this.y = y;
+		offsetX = x;
+		offsetY = y;
 	}
 
 	
 	public void place(int xcoord, int ycoord){
-		move(xcoord*16+Board.X+8, ycoord*16+Board.Y+8);
+		if(finalized){
+			throw new IllegalStateException("Piece has been finalized");
+		}
+		offset(Board.X+8, Board.Y+8);
 		placed = new Point(xcoord, ycoord);
 	}
 	
@@ -146,8 +145,13 @@ public class Piece extends Actor{
 	}
 	
 	
-	public boolean isPlaced(){
-		return placed!= null;
+	public boolean isFinalized(){
+		return finalized;
+	}
+	
+	public void finalize(){
+		finalized = true;
+		zIndex = 0;
 	}
 	
 	public String longString(){

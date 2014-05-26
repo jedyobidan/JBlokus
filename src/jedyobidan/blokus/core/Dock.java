@@ -81,9 +81,9 @@ public class Dock extends Actor{
 			AdvancedKey k = c.getKeysPressed().remove(0);
 			switch(k.keyCode){
 			case KeyEvent.VK_Q: 
-				selectedPiece.rotateCW(); break;
-			case KeyEvent.VK_E: 
 				selectedPiece.rotateCCW(); break;
+			case KeyEvent.VK_E: 
+				selectedPiece.rotateCW(); break;
 			case KeyEvent.VK_A: case KeyEvent.VK_D: 
 				selectedPiece.flipHorizontal(); break;
 			case KeyEvent.VK_W: case KeyEvent.VK_S: 

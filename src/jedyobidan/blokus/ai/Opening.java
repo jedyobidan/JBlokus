@@ -88,7 +88,7 @@ public class Opening {
 		public Move getMove(Player player){
 			List<String> newTransforms = new ArrayList<>(transforms);
 			for(int i = 0; i < player.playerID; i++){
-				newTransforms.add("CW");
+				newTransforms.add("CCW");
 			}
 			Point newPlace = new Point(convertX(placement.x, player.playerID), convertY(placement.y, player.playerID));
 			return new Move(piece, newTransforms, newPlace, player);

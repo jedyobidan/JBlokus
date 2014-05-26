@@ -112,14 +112,14 @@ public class Piece extends Actor{
 
 	//ROTATION methods
 	public void rotateCW(){
-		AffineTransform t = AffineTransform.getRotateInstance(-Math.PI/2);
+		AffineTransform t = AffineTransform.getRotateInstance(Math.PI/2);
 		t.concatenate(rotation);
 		rotation = t;
 		transformations.add("CW");
 	}
 	
 	public void rotateCCW(){
-		AffineTransform t = AffineTransform.getRotateInstance(Math.PI/2);
+		AffineTransform t = AffineTransform.getRotateInstance(-Math.PI/2);
 		t.concatenate(rotation);
 		rotation = t;
 		transformations.add("CCW");

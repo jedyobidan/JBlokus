@@ -1,5 +1,6 @@
 package jedyobidan.blokus.core;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,6 +38,37 @@ public class BoardMetrics {
 		return ans;
 	}
 	
+	public HashSet<HashSet<Point>> getAllZones(){
+		HashSet<HashSet<Point>> zones = new HashSet<>();
+		HashSet<Point> points = new HashSet<>();
+		for(int x = 0; x < 20; x++){
+			for(int y = 0; y < 20; y++){
+				points.add(new Point(x,y));
+			}
+		}
+		points.removeAll(board.covered);
+		while(points.size() > 0){
+			HashSet<Point> zone = new HashSet<>();
+			Point start = points.iterator().next();
+			getZone(zone, start.x, start.y);
+			zones.add(zone);
+			points.removeAll(zone);
+		}
+		return zones;
+	}
+	
+	public HashSet<Point> getZone(HashSet<Point> found, int x, int y){
+		if(found == null) found = new HashSet<>();
+		Point p = new Point(x,y);
+		if(BoardModel.inBounds(p) && !board.covered.contains(p) && !found.contains(p)){
+			found.add(new Point(x,y));
+			getZone(found,x+1,y);
+			getZone(found,x-1,y);
+			getZone(found,x,y+1);
+			getZone(found,x,y-1);
+		}
+		return found;
+	}
 	
 	public int deltaCorners(Piece p){
 		return plusCorners(p).size() - minusCorners(p).size();
@@ -56,8 +88,6 @@ public class BoardMetrics {
 		}
 		return ct;
 	}
-	
-	
 	
 	public double centerCornerDist(Piece p){
 		double dist = 20;

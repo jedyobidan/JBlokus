@@ -8,12 +8,6 @@ public class Apprentice extends AbstractAI{
 	public Apprentice(int pid) {
 		super(pid, "Apprentice_" + pid);
 	}
-
-	public Move selectMove(){
-		Move m = super.selectMove();
-		System.out.println(boardmetrics.centerCornerDist(m.getNewPiece()));
-		return m;
-	}
 	
 	@Override
 	public double score(Move m) {

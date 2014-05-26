@@ -29,9 +29,9 @@ public class AITest extends JFrame{
 		AITest test = new AITest();
 		
 		GameModel game = new GameModel();
-		game.addPlayer(AIPlayer.createAI("Apprentice", 0));
+		game.addPlayer(AIPlayer.createAI("Knight", 0));
 		game.addPlayer(AIPlayer.createAI("Apprentice", 1));
-		game.addPlayer(AIPlayer.createAI("Apprentice", 2));
+		game.addPlayer(AIPlayer.createAI("Knight", 2));
 		game.addPlayer(AIPlayer.createAI("Apprentice", 3));
 		
 		GameStage stage = new GameStage(display);

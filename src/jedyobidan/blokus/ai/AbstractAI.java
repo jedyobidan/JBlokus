@@ -1,19 +1,18 @@
 package jedyobidan.blokus.ai;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Random;
 
-import jedyobidan.blokus.core.BoardModel;
+import jedyobidan.blokus.core.BoardMetrics;
+import jedyobidan.blokus.core.GameModel;
 import jedyobidan.blokus.core.Move;
-import jedyobidan.blokus.core.Piece;
 
 public abstract class AbstractAI extends AIPlayer{
 	public static final int MAX_WEIGHT = 40;
 	protected float entropy;
 	protected Opening opening;
+	protected BoardMetrics boardmetrics;
 	public AbstractAI(int pid, String name){
 		this(pid, name, 0);
 	}
@@ -22,7 +21,8 @@ public abstract class AbstractAI extends AIPlayer{
 		entropy = 1f;
 		if(Math.random() < useOpening){
 			opening = selectOpening();
-			System.out.println(name + " using " + opening.name);
+			if(opening!=null)
+				System.out.println(name + " using " + opening.name);
 		}
 	}
 	
@@ -65,56 +65,14 @@ public abstract class AbstractAI extends AIPlayer{
 	}
 	
 	//Returns a double from 0.0 to 1.0, representing the relative weight of the score.
-	public double weight(double score, double bscore){
+	private double weight(double score, double bscore){
 		return Math.pow(score/bscore, 16/entropy);
 	}
 	
 	public abstract double score(Move m);
 	
-	protected int blockedCorners(Piece p){
-		int ct = 0;
-		for(int i = 0; i < 4; i++){
-			if(i== playerID) continue;
-			HashSet<Point2D> corners = game.getBoard().corners[i];
-			for(Point2D point: p.getPlacedPoints()){
-				if(!BoardModel.inBounds(point)) continue;
-				if(corners.contains(point)){
-					ct++;
-				}
-			}
-		}
-		return ct;
+	public void joinGame(GameModel game){
+		super.joinGame(game);
+		boardmetrics = new BoardMetrics(game.getBoard(), playerID);
 	}
-	
-	protected int deltaCorners(Piece p){
-		int ct = 0;
-		HashSet<Point2D> corners = game.getBoard().corners[playerID];
-		HashSet<Point2D> unusable = game.getBoard().unusable[playerID];
-		for(Point2D corner: p.getPlacedCorners()){
-			if(!BoardModel.inBounds(corner)) continue;
-			if(!unusable.contains(corner) && !corners.contains(corner)){
-				ct++;
-			}
-		}
-		for(Point2D point: p.getPlacedUnusable()){
-			if(!BoardModel.inBounds(point)) continue;
-			if(corners.contains(point)){
-				ct--;
-			}
-		}
-		return ct;
-	}
-	
-	protected double centerCornerDist(Piece p){
-		double dist = 20;
-		HashSet<Point2D> corners = game.getBoard().corners[playerID];
-		HashSet<Point2D> unusable = game.getBoard().unusable[playerID];
-		for(Point2D point: p.getPlacedCorners()){
-			if(!BoardModel.inBounds(point)) continue;
-			if(corners.contains(point) || unusable.contains(point)) continue;
-			dist= Math.min(dist,Math.abs(9.5 - point.getX()) + Math.abs(9.5 - point.getY()));
-		}
-		return dist;
-	}
-
 }

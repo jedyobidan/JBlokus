@@ -34,13 +34,13 @@ public class Knight extends AbstractAI{
 	@Override
 	public double score(Move m) {
 		Piece p = m.getNewPiece();
-		int dc = deltaCorners(p);
-		int dec = blockedCorners(p);
+		int dc = boardmetrics.deltaCorners(p);
+		int dec = boardmetrics.blockedCorners(p);
 		int size = p.getPlacedPoints().size();
 		int corner = p.getPlacedCorners().size();
 		double cornerEff = dc/(corner-1.0);
 		int movCount = 21-pieces.size();
-		double ccdist = centerCornerDist(p);
+		double ccdist = boardmetrics.centerCornerDist(p);
 		return 180 + size*130 + dc*50*(1-defensiveness) + cornerEff*20 + 
 				dec*35*(1+defensiveness) + 300/ccdist*Math.pow(0.8, movCount);
 	}

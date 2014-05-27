@@ -16,6 +16,18 @@ public class BoardMetrics {
 		this.playerID = pid;
 	}
 	
+	public HashSet<Point2D> plusUnusable(Piece p){
+		HashSet<Point2D> ans = new HashSet<>();
+		HashSet<Point2D> unusable = board.unusable[playerID];
+		for(Point2D un: p.getPlacedUnusable()){
+			if(!BoardModel.inBounds(un)) continue;
+			if(!unusable.contains(un)){
+				ans.add(un);
+			}
+		}
+		return ans;
+	}
+	
 	public HashSet<Point2D> plusCorners(Piece p){
 		HashSet<Point2D> ans = new HashSet<>();
 		HashSet<Point2D> corners = board.corners[playerID];

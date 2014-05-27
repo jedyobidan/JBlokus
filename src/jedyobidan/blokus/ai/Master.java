@@ -41,9 +41,11 @@ public class Master extends AbstractAI{
 	public double score(Move m) {
 		Piece p = m.getNewPiece();
 		int dc = boardmetrics.deltaCorners(p);
+		int du = boardmetrics.plusUnusable(p).size();
+		int movCount = 21-pieces.size();
 		int size = p.getPlacedPoints().size();
 		int dec = boardmetrics.blockedCorners(p);
-		int movCount = 21-pieces.size();
+		
 		double ccdist = boardmetrics.centerCornerDist(p);
 		double access = boardmetrics.accessArea();
 		int corner = p.getPlacedCorners().size();
@@ -52,7 +54,8 @@ public class Master extends AbstractAI{
 		newBoard.addPiece(p);
 		access = new BoardMetrics(newBoard, playerID).accessArea() - access;
 		return 500 + size*130 + dc*50  + cornerEff*10 + 
-				dec*25 + 500/ccdist*Math.pow(0.8, movCount) + Math.signum(access)*Math.sqrt(Math.abs(access))*35;
+				dec*25 + 500/ccdist*Math.pow(0.8, movCount) + 
+				Math.signum(access)*Math.sqrt(Math.abs(access))*35;
 	}
 
 }

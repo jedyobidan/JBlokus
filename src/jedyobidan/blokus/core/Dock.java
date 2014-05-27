@@ -152,7 +152,7 @@ public class Dock extends Actor{
 		if(player instanceof LocalPlayer && timePassed > 5 && timePassed%1 < 0.5){
 			Move m = ((LocalPlayer)player).getHint();
 			Piece p = m.getNewPiece();
-			p.render(g, new Color(210,210,210));
+			p.render(g, new Color(190,190,190));
 		}
 	}
 	

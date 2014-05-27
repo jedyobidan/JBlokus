@@ -1,7 +1,8 @@
 package jedyobidan.blokus.network;
 
-import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
@@ -53,9 +54,21 @@ public class RemotePlayer extends Player implements MessageObserver{
 	public void requestMove() {
 		waiting = true;
 		if(aiOverride){
-			move = aiOverrideMove();
+			final Timer t = new Timer();
+			t.schedule(new TimerTask(){
+				@Override
+				public void run() {
+					move = aiOverrideMove();
+					tryMove();
+					t.cancel();
+				}
+			}, 500);
 		}
 		tryMove();
+	}
+	
+	public String type(){
+		return "Remote Player";
 	}
 
 }

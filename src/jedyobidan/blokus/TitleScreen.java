@@ -84,7 +84,7 @@ public class TitleScreen extends Stage{
 					e1.printStackTrace();
 				}
 			}
-			viewMessage("Couldn't connect to the server!");
+			viewMessage(e.getLocalizedMessage() + "\n\nCouldn't connect to the server!");
 		}
 	}
 	

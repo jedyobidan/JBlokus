@@ -3,7 +3,14 @@ package jedyobidan.blokus.core;
 import java.awt.Point;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * Represents all the actions taken on a Piece to place it on the BoardModel.
+ * Is responsible for manipulate Pieces.
+ * @author Young
+ *
+ */
 public class Move implements Serializable{
 	private static final long serialVersionUID = 1L;
 	public final String pieceType;
@@ -14,37 +21,43 @@ public class Move implements Serializable{
 	
 	
 	public Move(Piece piece, Point placement, Player player) {
-		this.pieceType = piece.data.type;
-		this.transformations = new ArrayList<String>(piece.getTransformations());
-		this.placement = placement;
+		this(piece.data.type, piece.getTransformations(), placement, player);
+	}
+	
+	public Move(String pieceType, List<String> transformations, Point place, Player player){
+		this.pieceType = pieceType;
+		this.transformations = new ArrayList<String>(transformations);
+		this.placement = place;
 		this.playerID = player.playerID;
 		this.playerName = player.getName();
 	}
-
-	public void execute(GameModel game){
-		Piece piece = game.getPiece(playerID, pieceType);
-		piece.resetRotation();
+	
+	public void applyTransformation(Piece p){
+		p.resetRotation();
 		for(String s: transformations){
 			if(s.equals("CW")){
-				piece.rotateCW();
+				p.rotateCW();
 			} else if (s.equals("CCW")){
-				piece.rotateCCW();
+				p.rotateCCW();
 			} else if (s.equals("HF")){
-				piece.flipHorizontal();
+				p.flipHorizontal();
 			} else if (s.equals("VF")){
-				piece.flipVertical();
+				p.flipVertical();
 			}
 		}
-		if(legal(game)){
-			game.getBoard().place(piece, placement);
-		} else {
-			throw new IllegalArgumentException("Illegal Move");
-		}
-		piece.zIndex = 0;
+		p.place(placement.x, placement.y);
 	}
 	
-	public boolean legal(GameModel game){
-		return game.getBoard().canPlace(game.getPiece(playerID, pieceType), placement);
+	public boolean legal(BoardModel board){
+		Piece piece = new Piece(PieceData.getData(pieceType), playerID);
+		applyTransformation(piece);
+		return board.canPlace(piece);
+	}
+	
+	public Piece getNewPiece(){
+		Piece p = new Piece(PieceData.getData(pieceType), playerID);
+		applyTransformation(p);
+		return p;
 	}
 	
 	public String toString(){

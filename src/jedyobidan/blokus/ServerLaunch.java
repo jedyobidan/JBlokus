@@ -20,6 +20,7 @@ import jedyobidan.blokus.network.BlokusServer;
 import jedyobidan.debug.StdRedirect;
 
 public class ServerLaunch extends JFrame{
+	private static final long serialVersionUID = 1L;
 	private JComboBox<String> aiLevel;
 	private JSpinner port;
 	

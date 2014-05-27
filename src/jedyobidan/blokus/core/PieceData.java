@@ -1,16 +1,29 @@
 package jedyobidan.blokus.core;
 
 import java.awt.Point;
-import java.awt.geom.Point2D;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 import jedyobidan.io.IO;
 
+/**
+ * Represents a specific type of Piece.
+ * Is responsible for that Piece's points, corners, edges, and other natural features.
+ * @author Young
+ *
+ */
 public class PieceData {
+	private static final Map<String, PieceData> allData = new LinkedHashMap<>();
 	public final Set<Point> basePoints;
-	public final Set<Point> corners;
 	public final Set<Point> edges;
 	public final Set<Point> unusable;
+	public final Set<Point> corners;
 	public final String type;
 	public final int rotations;
 	public final boolean flip;
@@ -25,7 +38,17 @@ public class PieceData {
 		corners = calculateCorners();
 	}
 	
+	public static PieceData getData(String type){
+		if(allData.isEmpty()){
+			getAllPieces();
+		}
+		return allData.get(type);
+	}
+	
 	public static ArrayList<PieceData> getAllPieces(){
+		if(!allData.isEmpty()){
+			return new ArrayList<PieceData>(allData.values());
+		}
 		ArrayList<PieceData> ans = new ArrayList<PieceData>();
 		Scanner in = IO.getJarResource(Piece.class, "pieces.dat");
 		while(in.hasNextLine()){
@@ -41,8 +64,8 @@ public class PieceData {
 			int rotations = Integer.valueOf(args[args.length-2]);
 			boolean flip = Boolean.valueOf(args[args.length-1]);
 			PieceData data = new PieceData(type, points,rotations, flip);
-			System.out.println(data);
 			ans.add(data);
+			allData.put(type, data);
 		}
 		return ans;
 	}
@@ -89,9 +112,5 @@ public class PieceData {
 			ans+= "\n";
 		}
 		return ans;
-	}
-	
-	public static void main(String[] args){
-		getAllPieces();
 	}
 }

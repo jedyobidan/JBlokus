@@ -13,56 +13,60 @@ import java.util.Set;
 import jedyobidan.blokus.local.Board;
 import jedyobidan.ui.nanim.Actor;
 
+/**
+ * Represents a single Piece.
+ * Is responsible for its orientation, position, and rendering.
+ * @author Young
+ *
+ */
 public class Piece extends Actor{
 	public final PieceData data;
 	private AffineTransform rotation;
 	private ArrayList<String> transformations;
 	private Point placed;
-	private final Color color;
-	private int x;
-	private int y;
+	private final int pid;
+	private int offsetX;
+	private int offsetY;
+	private boolean finalized;
 	
-	public Piece(PieceData data, Color c){
+	public Piece(PieceData data, int pid){
 		this.data = data;
 		rotation = new AffineTransform();
 		transformations = new ArrayList<String>();
-		this.color = c;
+		this.pid = pid;
+		placed = new Point(0,0);
 	}
 	
 	public Piece getCopy(){
-		return new Piece(data, color);
+		return new Piece(data, pid);
 	}
 	
 	@Override
 	public void render(Graphics2D g) {
-		for(Point2D p: getRotationPoints()){
+		render(g, Player.getColor(pid));
+	}
+	
+	public void render(Graphics2D g, Color color){
+		for(Point2D p: getPlacedPoints()){
 			int renderX, renderY;
-			renderX = (int)(x + p.getX() * 16-8);
-			renderY = (int)(y + p.getY() *16-8);
+			renderX = (int)(offsetX + p.getX() * 16-8);
+			renderY = (int)(offsetY + p.getY() *16-8);
 			g.setColor(color.darker());
 			g.drawRect(renderX-1, renderY-1, 16, 16);
 			Color fill = new Color(color.getRed(), color.getGreen(), color.getBlue(), 191);
 			g.setColor(fill);
 			g.fillRect(renderX, renderY, 15, 15);
 		}
-		
 	}
 	
-	
-	public Set<Point2D> getRotationPoints(){
-		AffineTransform transform = new AffineTransform();
+	public AffineTransform getTransform(){
+		AffineTransform transform = AffineTransform.getTranslateInstance(placed.x, placed.y);
 		transform.concatenate(rotation);
-		
-		HashSet<Point2D> ans = new HashSet<Point2D>();
-		for(Point2D p: data.basePoints){
-			ans.add(transform.transform(p, null));
-		}
-		return ans;
+		return transform;
 	}
 	
 	public Set<Point2D> transform(Set<? extends Point2D> points){
-		AffineTransform transform = AffineTransform.getTranslateInstance(placed.x, placed.y);
-		transform.concatenate(rotation);
+		AffineTransform transform = getTransform();
 		
 		HashSet<Point2D> ans = new HashSet<Point2D>();
 		for(Point2D p: points){
@@ -79,39 +83,43 @@ public class Piece extends Actor{
 		return transform(data.edges);
 	}
 	
-	public Set<Point2D> getPlacedCorners(){
-		return transform(data.corners);
-	}
-	
 	public Set<Point2D> getPlacedUnusable(){
 		return transform(data.unusable);
 	}
 	
-	public void move(int x, int y){
-		if(placed!= null){
-			throw new IllegalStateException("Piece has been placed and cannot be moved");
+	public Set<Point2D> getPlacedCorners(){
+		return transform(data.corners);
+	}
+	
+	
+	public void offset(int x, int y){
+		if(finalized){
+			throw new IllegalStateException("Piece has been finalized");
 		}
-		this.x = x;
-		this.y = y;
+		offsetX = x;
+		offsetY = y;
 	}
 
 	
 	public void place(int xcoord, int ycoord){
-		move(xcoord*16+Board.X+8, ycoord*16+Board.Y+8);
+		if(finalized){
+			throw new IllegalStateException("Piece has been finalized");
+		}
+		offset(Board.X+8, Board.Y+8);
 		placed = new Point(xcoord, ycoord);
 	}
 	
 
 	//ROTATION methods
 	public void rotateCW(){
-		AffineTransform t = AffineTransform.getRotateInstance(-Math.PI/2);
+		AffineTransform t = AffineTransform.getRotateInstance(Math.PI/2);
 		t.concatenate(rotation);
 		rotation = t;
 		transformations.add("CW");
 	}
 	
 	public void rotateCCW(){
-		AffineTransform t = AffineTransform.getRotateInstance(Math.PI/2);
+		AffineTransform t = AffineTransform.getRotateInstance(-Math.PI/2);
 		t.concatenate(rotation);
 		rotation = t;
 		transformations.add("CCW");
@@ -137,8 +145,13 @@ public class Piece extends Actor{
 	}
 	
 	
-	public boolean isPlaced(){
-		return placed!= null;
+	public boolean isFinalized(){
+		return finalized;
+	}
+	
+	public void finalize(){
+		finalized = true;
+		zIndex = 0;
 	}
 	
 	public String longString(){
@@ -156,6 +169,10 @@ public class Piece extends Actor{
 		return ans;
 	}
 	
+	public int getPlayerID(){
+		return pid;
+	}
+	
 	public String toString(){
 		return data.type;
 	}
@@ -168,10 +185,6 @@ public class Piece extends Actor{
 	@Override
 	public Shape getHitbox() {
 		return null;
-	}
-	
-	public Color getColor(){
-		return color;
 	}
 
 	public ArrayList<String> getTransformations() {

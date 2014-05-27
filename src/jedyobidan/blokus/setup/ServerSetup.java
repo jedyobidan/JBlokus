@@ -14,8 +14,16 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.swing.*;
-import javax.swing.text.DefaultCaret;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import jedyobidan.blokus.core.GameModel;
 import jedyobidan.blokus.core.GameObserver;
@@ -26,6 +34,7 @@ import jedyobidan.blokus.network.PlayerData;
 import jedyobidan.borrowed.SmartScroller;
 
 public class ServerSetup extends JFrame implements GameObserver{
+	private static final long serialVersionUID = 4739846922658558368L;
 	private PlayerComponent[] players;
 	private JButton start;
 	private JTextArea moveLog;
@@ -50,8 +59,11 @@ public class ServerSetup extends JFrame implements GameObserver{
 		for(int i= 0; i < 4; i++){
 			this.players[i] = new PlayerComponent();
 			this.players[i].setPlayer(s.getPlayerData()[i]);
-			playerC.add(this.players[i]);
 		}
+		playerC.add(players[0]);
+		playerC.add(players[1]);
+		playerC.add(players[3]);
+		playerC.add(players[2]);
 		add(playerC);
 		
 		
@@ -111,6 +123,7 @@ public class ServerSetup extends JFrame implements GameObserver{
 	}
 	
 	private class PlayerComponent extends JLabel{
+		private static final long serialVersionUID = 1L;
 		private PlayerData player;
 		public PlayerComponent(){
 			this.setOpaque(true);

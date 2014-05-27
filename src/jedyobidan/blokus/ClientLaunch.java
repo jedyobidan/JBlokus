@@ -2,7 +2,6 @@ package jedyobidan.blokus;
 
 import javax.swing.JFrame;
 
-import jedyobidan.blokus.local.GameStage;
 import jedyobidan.debug.StdRedirect;
 import jedyobidan.ui.nanim.Display;
 import jedyobidan.ui.nanim.ThreadFPSRunner;

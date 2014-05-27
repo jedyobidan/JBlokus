@@ -1,6 +1,8 @@
 package jedyobidan.blokus.setup;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Random;
 
 import jedyobidan.blokus.ClientLaunch;
 import jedyobidan.blokus.ai.AIPlayer;
@@ -14,6 +16,7 @@ public class LocalGameSetup extends GameSetup{
 	private AISelector aiLevel;
 	private JoinWidget join;
 	private Button reset, start;
+	private String currAILevel;
 	public LocalGameSetup(Display d) {
 		super(d);
 		aiLevel = new AISelector();
@@ -45,13 +48,18 @@ public class LocalGameSetup extends GameSetup{
 			}			
 		});
 		addActor(reset);
+		
+		currAILevel = getAILevel();
 	}
 	
 	public void beforeStep(){
-		for(int i = 0; i < 4; i++){
-			if(players[i] instanceof AIPlayer){
-				players[i] = AIPlayer.createAI(getAILevel(), i);
+		if(!currAILevel.equals(getAILevel())){
+			for(int i = 0; i < 4; i++){
+				if(players[i] instanceof AIPlayer){
+					players[i] = AIPlayer.createAI(getAILevel(), i);
+				}
 			}
+			currAILevel = getAILevel();
 		}
 		super.beforeStep();
 	}
@@ -83,7 +91,21 @@ public class LocalGameSetup extends GameSetup{
 	
 	public String getAILevel(){
 		if(aiLevel!= null) return aiLevel.getOption();
-		else return "Random";
+		else return AIPlayer.AI_LEVELS[0];
+	}
+	
+	private int getAvailable(){
+		ArrayList<Integer> av = new ArrayList<>();
+		for(int i = 0; i < 4; i++){
+			if(players[i] instanceof AIPlayer){
+				av.add(i);
+			}
+		}
+		if(av.size() > 0){
+			return av.get(new Random().nextInt(av.size()));
+		} else {
+			return -1;
+		}
 	}
 	
 }

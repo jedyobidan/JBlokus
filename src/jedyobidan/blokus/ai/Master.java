@@ -41,7 +41,6 @@ public class Master extends AbstractAI{
 	public double score(Move m) {
 		Piece p = m.getNewPiece();
 		int dc = boardmetrics.deltaCorners(p);
-		int du = boardmetrics.plusUnusable(p).size();
 		int movCount = 21-pieces.size();
 		int size = p.getPlacedPoints().size();
 		int dec = boardmetrics.blockedCorners(p);

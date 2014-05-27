@@ -51,8 +51,8 @@ public class Master extends AbstractAI{
 		BoardModel newBoard = new BoardModel(boardmetrics.board);
 		newBoard.addPiece(p);
 		access = new BoardMetrics(newBoard, playerID).accessArea() - access;
-		return 500 + size*130 + dc*50  + cornerEff*20 + 
-				dec*35 + 500/ccdist*Math.pow(0.8, movCount) + Math.signum(access)*Math.sqrt(Math.abs(access))*40;
+		return 500 + size*130 + dc*50  + cornerEff*10 + 
+				dec*25 + 500/ccdist*Math.pow(0.8, movCount) + Math.signum(access)*Math.sqrt(Math.abs(access))*35;
 	}
 
 }

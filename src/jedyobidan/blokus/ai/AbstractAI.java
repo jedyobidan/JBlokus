@@ -44,9 +44,6 @@ public abstract class AbstractAI extends AIPlayer{
 		double bscore = Double.NEGATIVE_INFINITY;
 		for(Move m: possibleMoves){
 			double score = score(m);
-			if(score < 0){
-				throw new IllegalArgumentException("Score less than 0:" + score);
-			}
 			bscore = Math.max(bscore, score);
 			scores.put(m, score);
 		}

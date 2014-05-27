@@ -73,6 +73,7 @@ public abstract class AbstractAI extends AIPlayer{
 	
 	public void joinGame(GameModel game){
 		super.joinGame(game);
-		boardmetrics = new BoardMetrics(game.getBoard(), playerID);
+		if(game!= null)
+			boardmetrics = new BoardMetrics(game.getBoard(), playerID);
 	}
 }

@@ -2,11 +2,14 @@ package jedyobidan.blokus.core;
 
 import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class BoardMetrics {
-	private BoardModel board;
+	public BoardModel board;
 	private int playerID;
 	public BoardMetrics(BoardModel b, int pid){
 		this.board = b;
@@ -48,26 +51,54 @@ public class BoardMetrics {
 		}
 		points.removeAll(board.covered);
 		while(points.size() > 0){
-			HashSet<Point> zone = new HashSet<>();
 			Point start = points.iterator().next();
-			getZone(zone, start.x, start.y);
+			HashSet<Point> zone = getZone(start.x, start.y, Integer.MAX_VALUE);
 			zones.add(zone);
 			points.removeAll(zone);
 		}
 		return zones;
 	}
 	
-	public HashSet<Point> getZone(HashSet<Point> found, int x, int y){
-		if(found == null) found = new HashSet<>();
-		Point p = new Point(x,y);
-		if(BoardModel.inBounds(p) && !board.covered.contains(p) && !found.contains(p)){
-			found.add(new Point(x,y));
-			getZone(found,x+1,y);
-			getZone(found,x-1,y);
-			getZone(found,x,y+1);
-			getZone(found,x,y-1);
+	public HashSet<Point> getZone(int x, int y, int d){
+		HashMap<Point, Integer> distance = new HashMap<>();
+		HashSet<Point> black = new HashSet<>();
+		Queue<Point> gray = new LinkedList<>();
+		Point start = new Point(x,y);
+		gray.add(start);
+		distance.put(start, 0);
+		while(!gray.isEmpty()){
+			Point p = gray.poll();
+			if(distance.get(p) < d){
+				ArrayList<Point> adj = new ArrayList<>();
+				adj.add(new Point(p.x+1, p.y));
+				adj.add(new Point(p.x-1, p.y));
+				adj.add(new Point(p.x, p.y+1));
+				adj.add(new Point(p.x, p.y-1));
+				for(Point a: adj){
+					if(BoardModel.inBounds(a) && !board.covered.contains(a) &&
+							!gray.contains(a) && !black.contains(a)){
+						distance.put(a, distance.get(p) + 1);
+						gray.add(a);
+					}
+				}
+			}
+			black.add(p);
 		}
-		return found;
+		return black;
+	}
+	
+	
+	public double accessArea(){
+		int accessArea = 0;
+		for(HashSet<Point> zone: getAllZones()){
+			int corners = 0;
+			for(Point2D corner: board.corners[playerID]){
+				if(zone.contains(corner)){
+					accessArea+= zone.size()*Math.pow(0.5, corners++);
+				}
+			}
+		}
+		return accessArea;
 	}
 	
 	public int deltaCorners(Piece p){

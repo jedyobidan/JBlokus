@@ -37,6 +37,8 @@ public class BoardModel {
 	
 	public BoardModel(BoardModel model){
 		this();
+		pieces.addAll(model.pieces);
+		covered.addAll(new HashSet<>(model.covered));
 		for(int i = 0; i < 4; i++){
 			this.corners[i] = new HashSet<>(model.corners[i]);
 			this.unusable[i] = new HashSet<>(model.unusable[i]);

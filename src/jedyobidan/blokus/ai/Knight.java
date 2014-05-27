@@ -12,6 +12,7 @@ public class Knight extends AbstractAI{
 		super(pid, "Knight_"+pid, 0.65f);
 		Random r = new Random();
 		defensiveness = r.nextGaussian()/4;
+		entropy = 0.8f;
 		System.out.println(getName()+ " defense: " + String.format("%.2f", defensiveness));
 	}
 

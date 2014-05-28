@@ -1,0 +1,8 @@
+/bin/*
+/.settings/*
+/_serverlogs/*
+
+/dist/*/_serverlogs
+/dist/*.zip
+/_serverlogs
+/bin

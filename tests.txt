@@ -92,6 +92,13 @@ ClientC exits
 ClientA, ClientB ready
   - game starts
 ======================================================
+07: Connection dropped during game
+Prereq: Server is running, Client connected to online
+  game and playing
+------------------------------------------------------
+Exit Server
+  - Error displays on client
+======================================================
 09: Online Game Functions
 Prereq: Online game started with 2 clients, 2 AI
 ------------------------------------------------------

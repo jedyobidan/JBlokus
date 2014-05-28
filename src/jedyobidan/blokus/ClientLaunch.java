@@ -2,6 +2,7 @@ package jedyobidan.blokus;
 
 import javax.swing.JFrame;
 
+import jedyobidan.blokus.icon.JBlokusIcons;
 import jedyobidan.debug.StdRedirect;
 import jedyobidan.ui.nanim.Display;
 import jedyobidan.ui.nanim.ThreadFPSRunner;
@@ -16,6 +17,7 @@ public class ClientLaunch extends JFrame{
 		TitleScreen title = new TitleScreen(display);
 		display.addStage("TITLE", title);
 		this.add(display);
+		this.setIconImages(new JBlokusIcons());
 		this.pack();
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

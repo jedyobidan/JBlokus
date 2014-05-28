@@ -16,6 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import jedyobidan.blokus.ai.AIPlayer;
+import jedyobidan.blokus.icon.JBlokusIcons;
 import jedyobidan.blokus.network.BlokusServer;
 import jedyobidan.debug.StdRedirect;
 
@@ -48,6 +49,7 @@ public class ServerLaunch extends JFrame{
 			});
 		this.add(start, BorderLayout.SOUTH);
 		
+		this.setIconImages(new JBlokusIcons());
 		
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.pack();

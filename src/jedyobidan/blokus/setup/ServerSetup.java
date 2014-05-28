@@ -29,6 +29,7 @@ import jedyobidan.blokus.core.GameModel;
 import jedyobidan.blokus.core.GameObserver;
 import jedyobidan.blokus.core.Move;
 import jedyobidan.blokus.core.Player;
+import jedyobidan.blokus.icon.JBlokusIcons;
 import jedyobidan.blokus.network.BlokusServer;
 import jedyobidan.blokus.network.PlayerData;
 import jedyobidan.borrowed.SmartScroller;
@@ -99,6 +100,7 @@ public class ServerSetup extends JFrame implements GameObserver{
 				}
 			}
 		});
+		this.setIconImages(new JBlokusIcons());
 		this.pack();
 		this.setLocation(20, 20);
 	}

@@ -1,4 +1,4 @@
-JBlokus
+JBlokus by Chenyang Wang
 =======
 
 Java implementation of Blokus
